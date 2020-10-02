@@ -1,0 +1,1 @@
+# OSLO365-plugin
