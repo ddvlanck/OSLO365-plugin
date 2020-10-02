@@ -1,0 +1,142 @@
+/* 
+ * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ */
+
+ html,
+ body {
+     width: 100%;
+     height: 100%;
+     margin: 0;
+     padding: 0;
+ }
+
+ body {
+     overflow-x: hidden;
+     overflow-y: scroll;
+     -ms-overflow-style: scrollbar;
+     display: flex;
+     flex-direction: column;
+ }
+ 
+ /*
+ ul {
+     margin: 0;
+     padding: 0;
+ }
+ */
+
+ .header {
+    padding: 10px 0px 10px 0px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    align-items: center;
+ }
+ 
+ .header a.logo {
+    display: inline-block;
+    background-image: url("../../assets/vo_oslo_logo.png");
+    alt: "Vlaamse Overheid OSLO";
+    height: 90px;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+ .main {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-align-items: left;
+    align-items: left;
+    -webkit-flex: 1 0 0;
+    flex: 1 0 0;
+    padding: 10px 20px;
+ }
+ 
+ .main > h2 {
+     width: 100%;
+     text-align: center;
+ }
+
+ .buttonbox {
+    display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+      box-sizing: border-box;
+  }
+
+ .button-border .button-label {
+  color: white;
+  text-align: center;
+}
+
+.button-border {
+	margin-top: 10px;
+    background-color: #0078d7;
+    border-color: #0078d7;
+
+    cursor: pointer;
+    display: inline-block;
+    height: auto;
+    min-width: 80px;
+    padding: 4px 0px;
+    text-align: center;
+}
+
+.button-border:hover .button-label,
+.button-border:focus .button-label{
+  color: #ffffff;
+  cursor: pointer;
+}
+
+b {
+    font-weight: bold;
+}
+ 
+.search-box-label {
+    color: #0078d7;
+    font-weight: bold;
+}
+
+.search-box {
+    /*border: 0.5px solid black;*/
+    text-align: left;
+    min-width: 200px;
+    width: 100%;
+    color: blue;
+    font-weight: normal;
+    box-sizing: border-box;
+  }
+
+  .proximus-footer {
+    /*position: fixed;*/
+    bottom: 0;
+    display: flex;
+      padding: 3px 20px 1px 20px;
+      width: 100%;
+      color: #cec0de;
+      background-color: #5c2d91;
+      vertical-align: center;
+      text-align: left;
+      line-height: 30px;
+  }
+
+  a.proximus-logo {
+    margin-left: 8px;
+    margin-top: 4px;
+    width: 162px;
+    height: 20px;
+    display: inline-block;
+    background-image: url("https://www.proximus.be/dam/jcr:f63bd103-c4a1-4ce1-b536-554a8017ac99/cdn/sites/support/images/common/logo-proximus-white~2015-11-24-13-13-24~cache.2015-11-24-13-13-24.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
