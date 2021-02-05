@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+	Copyright (c) 2020 Vlaamse Overheid. Licensed under the MIT License.
+	See LICENSE in the project root for license information.
+
+	{{template_info}}
+-->
+<OfficeApp
+	xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+	xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+	xsi:type="TaskPaneApp">
+	<Id>57d6f741-c837-4896-9918-ef8e9d555089</Id>
+	<Version>1.0.0.2</Version>
+	<ProviderName>Vlaamse overheid</ProviderName>
+	<DefaultLocale>nl-BE</DefaultLocale>
+	<DisplayName DefaultValue="OSLO standaardenregister"/>
+	<Description DefaultValue="Vlaamse overheid OSLO Word Add-in"/>
+	<IconUrl DefaultValue="{{plugin_host_url}}/assets/vo_logo.png"/>
+	<HighResolutionIconUrl DefaultValue="{{plugin_host_url}}/assets/vo_logo.png"/>
+	<SupportUrl DefaultValue="https://data.vlaanderen.be/standaarden/"/>
+	<AppDomains>
+		<AppDomain>{{plugin_host_domain}}</AppDomain>
+	</AppDomains>
+	<Hosts>
+		<Host Name="Document"/>
+	</Hosts>
+	<DefaultSettings>
+		<SourceLocation DefaultValue="{{plugin_host_url}}/taskpane.html"/>
+	</DefaultSettings>
+	<Permissions>ReadWriteDocument</Permissions>
+	<VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+		<Hosts>
+			<Host xsi:type="Document">
+				<DesktopFormFactor>
+
+					<GetStarted>
+						<Title resid="GetStarted.Title"/>
+						<Description resid="GetStarted.Description"/>
+						<LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+					</GetStarted>
+
+					<!-- Extend the ribbon -->
+					<ExtensionPoint xsi:type="PrimaryCommandSurface">
+						<OfficeTab id="TabHome">
+							<Group id="OsloRibbonGroup">
+								<Label resid="OsloRibbonGroup.Label"/>
+								<Icon>
+									<bt:Image size="16" resid="Icon.16x16"/>
+									<bt:Image size="32" resid="Icon.32x32"/>
+									<bt:Image size="80" resid="Icon.80x80"/>
+								</Icon>
+								<Control xsi:type="Button" id="OsloRibbonButton">
+									<Label resid="OsloRibbonButton.Label"/>
+									<Supertip>
+										<Title resid="OsloRibbonButton.Label"/>
+										<Description resid="OsloRibbonButton.Description"/>
+									</Supertip>
+									<Icon>
+										<bt:Image size="16" resid="Icon.16x16"/>
+										<bt:Image size="32" resid="Icon.32x32"/>
+										<bt:Image size="80" resid="Icon.80x80"/>
+									</Icon>
+									<Action xsi:type="ShowTaskpane">
+										<TaskpaneId>OsloTaskPane</TaskpaneId>
+										<SourceLocation resid="Taskpane.Url"/>
+									</Action>
+								</Control>
+							</Group>
+						</OfficeTab>
+					</ExtensionPoint>
+
+					<!-- Extend the context menu -->
+					<ExtensionPoint xsi:type="ContextMenu">
+						<OfficeMenu id="ContextMenuText">
+							<Control xsi:type="Button" id="OsloContextMenu">
+								<Label resid="OsloContextMenu.Label"/>
+								<Supertip>
+									<Title resid="OsloContextMenu.Label"/>
+									<Description resid="OsloContextMenu.Description"/>
+								</Supertip>
+								<Icon>
+									<bt:Image size="16" resid="Icon.16x16"/>
+									<bt:Image size="32" resid="Icon.32x32"/>
+									<bt:Image size="80" resid="Icon.80x80"/>
+								</Icon>
+								<Action xsi:type="ShowTaskpane">
+									<TaskpaneId>OsloTaskPane</TaskpaneId>
+									<SourceLocation resid="Taskpane.Url"/>
+								</Action>
+							</Control>
+						</OfficeMenu>
+					</ExtensionPoint>
+				</DesktopFormFactor>
+			</Host>
+		</Hosts>
+		<Resources>
+			<bt:Images>
+				<bt:Image id="Icon.16x16" DefaultValue="{{plugin_host_url}}/assets/vo_logo.png"/>
+				<bt:Image id="Icon.32x32" DefaultValue="{{plugin_host_url}}/assets/vo_logo.png"/>
+				<bt:Image id="Icon.80x80" DefaultValue="{{plugin_host_url}}/assets/vo_logo.png"/>
+			</bt:Images>
+			<bt:Urls>
+				<bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
+				<bt:Url id="Taskpane.Url" DefaultValue="{{plugin_host_url}}/taskpane.html"/>
+			</bt:Urls>
+			<bt:ShortStrings>
+				<bt:String id="GetStarted.Title" DefaultValue="Aan de slag"/>
+				<bt:String id="OsloRibbonGroup.Label" DefaultValue="Zoeken"/>
+				<bt:String id="OsloRibbonButton.Label" DefaultValue="VO OSLO"/>
+				<bt:String id="OsloContextMenu.Label" DefaultValue="Zoek op in OSLO"/>
+			</bt:ShortStrings>
+			<bt:LongStrings>
+				<bt:String id="GetStarted.Description" DefaultValue="De extensie is geladen. Ga naar de Start/Home tab en klik op de 'VO OSLO' knop om in het register te zoeken."/>
+				<bt:String id="OsloRibbonButton.Description" DefaultValue="Klik om het OSLO zijpaneel te openen"/>
+				<bt:String id="OsloContextMenu.Description" DefaultValue="Zoek op in OSLO"/>
+			</bt:LongStrings>
+		</Resources>
+	</VersionOverrides>
+</OfficeApp>
