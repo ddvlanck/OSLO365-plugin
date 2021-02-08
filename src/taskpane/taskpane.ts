@@ -5,7 +5,7 @@
 
  /** The config for this code */
 namespace AppConfig {
-	/** The URL of the Oslo data file. Retrieved with a simple GET. This static resource can be replaced with a dynamic backend endpoint. */
+	/** The URL of the Oslo data file. Retrieved with a simple GET. This static resource is replaced with a dynamic backend endpoint in the production environment. */
 	export const dataFileUrl = "/oslo_terminology.json";
 
 	/** Set true to enable some trace messages to help debugging. */
@@ -41,13 +41,13 @@ Office.onReady(info => {
 		document.getElementById("sideload-msg").style.display = "none";
 		document.getElementById("app-body").style.display = "flex";
 		document.getElementById("searchFilter").onkeyup = onSearchFilterKeyUp;
-		
+
 		document.getElementById("findNext").onclick = onFindNextClicked;
 		document.getElementById("insertFootnote").onclick = onInsertFootnoteClicked;
 		document.getElementById("insertEndnote").onclick = onInsertEndnoteClicked;
-		
+
 		Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, onWordSelectionChanged);
-				
+
 		searching = false;
 
 		// There's a bug in the office.js libraries, causing an exception in some browsers when 3rd party cookies are blocked. Notify the user why the plugin doesn't work.
@@ -56,7 +56,7 @@ Office.onReady(info => {
 		} catch (error) {
 			setResultText("De extensie kon niet correct worden geladen. Gelieve in de browser instellingen alle cookies toe te laten, en daarna de pagina te herladen.");
 		}
-		
+
 		initOsloCache(onCacheInitialized);
 	}
 
@@ -95,7 +95,7 @@ export async function onFindNextClicked() {
 		// A Word doc doesn't only consist of characters, but also markup, styles, tables, lists, etc.
 		// Because of this, manipulation of text isn't done with strings, but with Range objects
 		// (which can be imagined as virtual selections parts of the doc)
-		
+
 		// We start with the full document Range
 		const range = context.document.body.getRange();
 
@@ -103,7 +103,7 @@ export async function onFindNextClicked() {
 		let paragraph = range.paragraphs.getFirstOrNullObject();
 		paragraph.load();
 		await context.sync();
-		
+
 		let paragraphIndex = 0;
 		let found = false;
 
@@ -113,18 +113,18 @@ export async function onFindNextClicked() {
 			let skipParagraph = false;
 
 			// There doesn't seem to be a way to tell which paragraph the current selection is in exactly, so we skip paragraphs until we get there.
-			// Note that even when there is no selection, the selection Range still exists and represents the current caret position.			
+			// Note that even when there is no selection, the selection Range still exists and represents the current caret position.
 			const wordPosition = paragraph.getRange().compareLocationWith(selection);
 			await context.sync();
 
 			if (wordPosition.value === Word.LocationRelation.before) {
 				skipParagraph = true;
 			}
-			
+
 			if (!skipParagraph) {
 				// Break up the paragraph into individual word Ranges
 				trace("<<<" + paragraph.text + ">>>");
-				
+
 				let words = paragraph.split(wordDelimiters, true /* trimDelimiters*/, true /* trimSpacing */);
 				words.load();
 				await context.sync().catch(function (error) {
@@ -172,7 +172,7 @@ export async function onFindNextClicked() {
 			await context.sync();
 			paragraphIndex++;
 		}
-		
+
 		return context.sync();
 	});
 }
@@ -190,7 +190,7 @@ function findNextMatch(wordList : Array<Word.Range>) : Word.Range {
 	for (let i = 0; i < wordList.length; i++) {
 		const word = wordList[i];
 		const wordText = word.text.toLowerCase();
-		
+
 		// For each word, see if we have a matching bucket (key = first word of the key phrase)
 		let bucket = lookup.get(wordText);
 
@@ -209,12 +209,12 @@ function findNextMatch(wordList : Array<Word.Range>) : Word.Range {
 		for (let n = 0; n < bucket.length; n++) {
 			let numWords = bucket[n].numWords;
 			let keyphrase =  bucket[n].keyphrase;
-			
+
 			if (numWords > wordList.length - i)
 				continue; // Not enough words left to match the bucket key
-			
+
 			let phrase = '';
-			
+
 			// Join as many words from the paragraph as there are words in the bucket key
 			for (let j = 0; j < numWords; j++) {
 				phrase += phrase ? " " : "";
@@ -222,7 +222,7 @@ function findNextMatch(wordList : Array<Word.Range>) : Word.Range {
 			}
 
 			trace("#words=" + numWords + " match '" + phrase + "' == '" + keyphrase + "' ?");
-			
+
 			// Check if the joined words match the bucket key
 			if (keyphrase === phrase) {
 				// They match. Create a Range for the matching words and return it (so we can select the words).
@@ -239,11 +239,14 @@ function findNextMatch(wordList : Array<Word.Range>) : Word.Range {
 export async function onInsertFootnoteClicked() {
 	return Word.run(async function (context) {
 		const selection = context.document.getSelection();
+		const rangeCollection = context.document.getSelection().getTextRanges([" "], true);
+		rangeCollection.load();
 		selection.load();
 		await context.sync();
 
-		insertNote(context, selection, false /* useEndnote */);
+		const trimmedSelection = rangeCollection.items[rangeCollection.items.length - 1];
 
+		insertNote(context, selection, trimmedSelection, false /* useEndnote */);
 		await context.sync();
 	});
 }
@@ -252,10 +255,13 @@ export async function onInsertFootnoteClicked() {
 export async function onInsertEndnoteClicked() {
 	return Word.run(async function (context) {
 		const selection = context.document.getSelection();
+		const rangeCollection = context.document.getSelection().getTextRanges([" "], true);
+		rangeCollection.load();
 		selection.load();
 		await context.sync();
+		const trimmedSelection = rangeCollection.items[rangeCollection.items.length - 1];
 
-		insertNote(context, selection, true /* useEndnote */);
+		insertNote(context, selection, trimmedSelection,true /* useEndnote */);
 
 		await context.sync();
 	});
@@ -266,11 +272,11 @@ export async function onInsertEndnoteClicked() {
  * @param context : the current Word context
  * @param selection : the current text selection (Range) in the Word doc
  * @param useEndnote : true to insert an endnote, false to insert a footnote
- */ 
-function insertNote(context: Word.RequestContext, selection: Word.Range, useEndnote: boolean) {
+ */
+function insertNote(context: Word.RequestContext, selection: Word.Range, trimmedSelection: Word.Range, useEndnote: boolean) {
 	if (selection.isEmpty)
 		return; // Nothing selected, nothing to do
-	
+
 	// The selection is a Range of markup, convert it to plain text so we can compare it
 	const mainText = selection.text;
 
@@ -293,7 +299,7 @@ function insertNote(context: Word.RequestContext, selection: Word.Range, useEndn
 
 		const noteText = createNoteText(entry.description, entry.reference);
 		const xml = useEndnote ? createEndnoteXml(noteText) : createFootnoteXml(noteText);
-		context.document.getSelection().insertOoxml(xml, "After");
+		trimmedSelection.insertOoxml(xml, "After");
 	}
 }
 
@@ -351,7 +357,7 @@ function initOsloCache(afterCacheInitialized : () => void) : void {
 				list = [];
 				osloLookupMap.set(words[0], list);
 			}
-			
+
 			list.push(keyEntry);
 		}
 
@@ -423,7 +429,7 @@ function parseOsloResult(elasticData : any) : IOsloItem[] {
 		for (let item of elasticData.hits.hits) {
 			item = item._source;
 			// Convert the result items into our own objects
-			let osloEntry : IOsloItem = {label: item.prefLabel? item.prefLabel : "", keyphrase: item.prefLabel? item.prefLabel.toLowerCase() : "", description: item.definition, reference: item.URI};
+			let osloEntry : IOsloItem = {label: item.prefLabel? item.prefLabel : "", keyphrase: item.prefLabel? item.prefLabel.toLowerCase() : "", description: item.definition, reference: item.id};
 			// And store the data objects in a list
 			if (osloEntry.keyphrase && osloEntry.description) {
 				data.push(osloEntry);
@@ -622,7 +628,7 @@ function createNoteText(description : string, reference : string) : string {
 /** Creates the OOXML text needed to add a footnote to the Word document. */
 function createFootnoteXml(noteText : string) : string {
 	// Note: the <?xml?> tag must be on the first line, or Word won't accept it (console error: Unhandled promise rejection)
-	var xml : string = 
+	var xml : string =
 		`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 		<?mso-application progid="Word.Document"?>
 		<pkg:package xmlns:pkg="http://schemas.microsoft.com/office/2006/xmlPackage">
