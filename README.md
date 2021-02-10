@@ -8,11 +8,11 @@ See the documentation in /docs/ for more details.
 To quickly get started with the sources, first make sure you have the latest node.js installed.  
 Check out the sources into a folder, and then open a command prompt (on Windows) in that folder.  
 Now run the following commands in sequence: 
- * npm install → Downloads and install the node modules
- * npm update → Updates the node modules.
- * npm run build → Compiles the sources and copies the files needed for web deploy to the /dist/ folder. Also generates manifest.xml files based on settings in webpack.config.js .
- * npm start → Generates and installs a local TLS certificate. Starts the dev server on https://127.0.0.1:3000 . Launches desktop Word with the add-in automatically sideloaded. When running, the dev server automatically recompiles and redeploys changed sources.
- * npm stop → Stops the build server. Closes desktop Word.
+ * `npm install` → Downloads and install the node modules
+ * `npm update` → Updates the node modules.
+ * `npm run build` → Compiles the sources and copies the files needed for web deploy to the /dist/ folder. Also generates manifest.xml files based on settings in webpack.config.js .
+ * `npm start` → Generates and installs a local TLS certificate. Starts the dev server on https://127.0.0.1:3000 . Launches desktop Word with the add-in automatically sideloaded. When running, the dev server automatically recompiles and redeploys changed sources.
+ * `npm stop` → Stops the build server. Closes desktop Word.
  
 
 ## TypeScript
