@@ -52,7 +52,6 @@ Office.onReady(info => {
         document.getElementById("insertFootnote").onclick = onInsertFootnoteClicked;
         document.getElementById("insertEndnote").onclick = onInsertEndnoteClicked;
 
-
         Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, onWordSelectionChanged);
 
         searching = false;
@@ -297,10 +296,10 @@ export async function onInsertFootnoteClicked() {
         selection.load();
         await context.sync();
 
-        const trimmedSelection = rangeCollection.items[rangeCollection.items.length - 1];
+        const selectionToInsertAfter = rangeCollection.items[0].getRange().expandTo(rangeCollection.items[rangeCollection.items.length - 1].getRange());
+        selectionToInsertAfter.select();
+        insertNote(context, selection, selectionToInsertAfter, false /* useEndnote */);
 
-        insertNote(context, selection, trimmedSelection, false /* useEndnote */);
-        //trimmedSelection.select();
         await context.sync();
     });
 }
@@ -313,9 +312,11 @@ export async function onInsertEndnoteClicked() {
         rangeCollection.load();
         selection.load();
         await context.sync();
-        const trimmedSelection = rangeCollection.items[rangeCollection.items.length - 1];
 
-        insertNote(context, selection, trimmedSelection, true /* useEndnote */);
+        const selectionToInsertAfter = rangeCollection.items[0].getRange().expandTo(rangeCollection.items[rangeCollection.items.length - 1].getRange());
+        selectionToInsertAfter.select();
+
+        insertNote(context, selection, selectionToInsertAfter, true /* useEndnote */);
 
         await context.sync();
     });
@@ -327,7 +328,7 @@ export async function onInsertEndnoteClicked() {
  * @param selection : the current text selection (Range) in the Word doc
  * @param useEndnote : true to insert an endnote, false to insert a footnote
  */
-function insertNote(context: Word.RequestContext, selection: Word.Range, trimmedSelection: Word.Range, useEndnote: boolean) {
+function insertNote(context: Word.RequestContext, selection: Word.Range, selectionToInsertAfter: Word.Range, useEndnote: boolean) {
     if (selection.isEmpty)
         return; // Nothing selected, nothing to do
 
@@ -353,7 +354,7 @@ function insertNote(context: Word.RequestContext, selection: Word.Range, trimmed
 
         const noteText = createNoteText(entry.description, entry.reference);
         const xml = useEndnote ? createEndnoteXml(noteText) : createFootnoteXml(noteText);
-        trimmedSelection.insertOoxml(xml, "After");
+        selectionToInsertAfter.insertOoxml(xml, "After");
     }
 }
 
