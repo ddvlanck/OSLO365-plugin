@@ -10,6 +10,9 @@ namespace AppConfig {
     /** The URL of the Oslo data file. Retrieved with a simple GET. This static resource is replaced with a dynamic backend endpoint in the production environment. */
     export const dataFileUrl = "/oslo_terminology.json";
 
+    export const englishLocale = "/en.json";
+    export const dutchLocale = "/nl.json";
+
     /** Set true to enable some trace messages to help debugging. */
     export const trace = false;
 }
@@ -41,7 +44,7 @@ Office.onReady(info => {
     if (info.host === Office.HostType.Word) {
         // Get the display language
         const displayLanguage = Office.context.displayLanguage;
-        localization(displayLanguage);
+        localize(displayLanguage);
 
         // Initialize element visibility, register event handlers
         document.getElementById("sideload-msg").style.display = "none";
@@ -72,53 +75,6 @@ Office.onReady(info => {
     }
 });
 
-
-function localization(displayLanguage: string) {
-    if (displayLanguage.toLowerCase() === 'nl-be' || displayLanguage.toLowerCase() === 'nl-nl') {
-        document.getElementById('InstructionsBox').innerHTML = `<p><hr>
-                    <b>Instructies:</b><br> 
-                    Selecteer in uw document de tekst die u wil opzoeken in het begrippenkader van OSLO.
-                    <p>
-                    Alternatief kan u ook tekst in het zoekvak hierboven intypen (start met = voor een exacte match, typ enter om te zoeken).
-                    <p>
-                    Klik op "Volgende zoeken" om zoektermen van de knowledge graph in uw document te vinden.
-                    Elke klik zoekt en selecteert de volgende.
-                    <p>
-                    Eens een zoekterm gevonden en geselecteerd is, kan u op "Voetnoot invoegen" of "Eindnoot invoegen" klikken,
-                    om de informatie uit de knowledge graph respectivelijk als voetnoot of eindnoot toe te voegen in uw document.
-                    <p>
-                    Indien er meerdere zoekresultaten zijn, moet u eerst het vakje aanvinken van de zoekterm die u als
-                    voetnoot of eindnoot wil toevoegen.
-                    <p>`;
-        document.getElementById('findNext').innerHTML = `<span class="button-label">Volgende<br>zoeken</span>`;
-        document.getElementById('insertFootnote').innerHTML = `<span class="button-label">Voetnoot<br>invoegen</span>`;
-        document.getElementById('insertEndnote').innerHTML = `<span class="button-label">Eindnoot<br>invoegen</span>`;
-        (<HTMLInputElement>document.getElementById('searchFilter')).placeholder = `Vraag het aan OSLO...`;
-        document.getElementById('loadingError').innerText = 'Deze extensie werkt enkel vanuit Word 2016';
-        document.getElementById('footer').innerHTML = `<div>Ontwikkeld door</div><a class="proximus-logo" href="https://www.proximus.com/nl/" target="_blank"></a>`
-    } else {
-        document.getElementById('InstructionsBox').innerHTML = `<p><hr><b>Instructions:</b><br> 
-                    In your document, select the text you want to look up in the OSLO Knowledge Vocabulary.
-                    <p>
-                    Alternatively, you can also enter text in the search box above (start with = for an exact match, type enter to search). 
-                    <p>
-                    Click on "Find next" to find terms from the OSLO Knowledge Vocabulary in your document.
-                    Each click search en selects the next term.
-                    <p>
-                    Once a search term has been found and selected, you can click on "Insert footnote" or "Insert endnote",
-                    to add the information from the knowledge vocabulary as footnote or endnote respectively in your document.
-                    <p>
-                    If there are multiple search results, you must first tick the box of the search term you want as
-                    add as a footnote or endnote.
-                    <p>`;
-        document.getElementById('findNext').innerHTML = `<span class="button-label">Find<br>next</span>`;
-        document.getElementById('insertFootnote').innerHTML = `<span class="button-label">Insert<br>footnote</span>`;
-        document.getElementById('insertEndnote').innerHTML = `<span class="button-label">Insert<br>endnote</span>`;
-        (<HTMLInputElement>document.getElementById('searchFilter')).placeholder = `Let's ask OSLO...`;
-        document.getElementById('loadingError').innerText = 'This add-in only works for Word 2016 and above.';
-        document.getElementById('footer').innerHTML = `<div>Developed by</div><a class="proximus-logo" href="https://www.proximus.com/nl/" target="_blank"></a>`
-    }
-}
 
 /** Called when the user selects something in the Word document */
 function onWordSelectionChanged(result: Office.AsyncResult<void>) {
@@ -357,6 +313,40 @@ function insertNote(context: Word.RequestContext, selection: Word.Range, selecti
         const noteText = createNoteText(entry.description, entry.reference);
         const xml = useEndnote ? createEndnoteXml(noteText) : createFootnoteXml(noteText);
         selectionToInsertAfter.insertOoxml(xml, "After");
+    }
+}
+
+
+/** Function that changes language based on Office display language **/
+function localize(displayLanguage: string){
+    const translationFile = identifyLocale(displayLanguage);
+    const elements = document.querySelectorAll('[data-i18n]');
+
+    httpRequest("GET", translationFile).then((json: string) => {
+        //TODO: error handling?
+
+        const data = JSON.parse(json);
+        elements.forEach(element => {
+
+            const attributeValue = (<HTMLElement>element).dataset.i18n;
+            const text = data[attributeValue];
+
+            if(attributeValue === 'searchFilter'){
+                (<HTMLElement>element).setAttribute('placeholder', text);
+            } else {
+                element.innerHTML = text;
+            }
+        })
+    })
+}
+
+function identifyLocale(displayLanguage: string){
+    switch (displayLanguage.toLowerCase()) {
+        case 'nl-nl':
+        case 'nl-be':
+            return AppConfig.dutchLocale;
+        default:
+            return AppConfig.englishLocale;
     }
 }
 

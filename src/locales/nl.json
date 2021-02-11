@@ -1,0 +1,9 @@
+{
+  "instructions": "<p><hr><b>Instructies:</b><br>Selecteer in uw document de tekst die u wil opzoeken in het begrippenkader van OSLO.<p>Alternatief kan u ook tekst in het zoekvak hierboven intypen (start met = voor een exacte match, typ enter om te zoeken).<p>Klik op \"Volgende zoeken\" om zoektermen van de knowledge graph in uw document te vinden.Elke klik zoekt en selecteert de volgende.<p>Eens een zoekterm gevonden en geselecteerd is, kan u op \"Voetnoot invoegen\" of \"Eindnoot invoegen\" klikken, om de informatie uit de knowledge graph respectivelijk als voetnoot of eindnoot toe te voegen in uw document.<p>Indien er meerdere zoekresultaten zijn, moet u eerst het vakje aanvinken van de zoekterm die u als voetnoot of eindnoot wil toevoegen.<p>",
+  "findNext" : "<span class=\"button-label\">Volgende<br>Zoeken</span>",
+  "footnote" : "<span class=\"button-label\">Voetnoot<br>Invoegen</span>",
+  "endnote" : "<span class=\"button-label\">Eindnoot<br>Invoegen</span>",
+  "searchFilter" : "Vraag het aan OSLO...",
+  "loadingError" : "Deze extensie werkt enkel vanuit Word 2016",
+  "footer": "<div>Ontwikkeld door</div><a class=\"proximus-logo\" href=\"https://www.proximus.com/nl/\" target=\"_blank\"></a>"
+}

@@ -44,13 +44,13 @@ module.exports = async (env, options) => {
 		},
 		plugins: [
 			new CleanWebpackPlugin(),
-			
+
 			new HtmlWebpackPlugin({
 				filename: "taskpane.html",
 				template: "./src/taskpane/taskpane.html",
 				chunks: ["polyfill", "taskpane"]
 			}),
-	
+
 			new CopyWebpackPlugin([ {
 				from: "./src/taskpane/taskpane.css",
 				to: "taskpane.css"
@@ -72,6 +72,12 @@ module.exports = async (env, options) => {
 				to: "../manifest.xml",
 				force: true,
 				transform: (content, path) => replace_placeholders_dev(content)
+			}, {
+				from: "./src/locales/en.json",
+				to: "en.json"
+			}, {
+				from: "./src/locales/nl.json",
+				to: "nl.json"
 			}
 		])
 	],

@@ -29,25 +29,25 @@
 
 		<!-- The following section is shown when this page is loaded in a browser outside of Word/O365. -->
 		<section id="sideload-msg" class="main">
-			<h2 class="ms-font-xl" id="loadingError">Deze extensie werkt enkel vanuit Word 2016</h2>
+			<h2 data-i18n="loadingError" class="ms-font-xl" id="loadingError">Deze extensie werkt enkel vanuit Word 2016</h2>
 		</section>
 
 		<!-- Inside Word, the following section will show instead. -->
 		<main id="app-body" class="main" style="display: none;">
 			<!-- Free-text search input -->
-			<input role="text" id="searchFilter" class="search-box" placeholder="Vraag het aan OSLO.">
+			<input data-i18n="searchFilter" role="text" id="searchFilter" class="search-box" placeholder="Vraag het aan OSLO.">
 
 			<!-- Buttons to search registered terms and insert foot/endnotes. -->
 			<div id="buttons" class="buttonbox">
-				<div role="button" id="findNext" class="button-border">
+				<div data-i18n="findNext" role="button" id="findNext" class="button-border">
 
 				</div>
 
-				<div role="button" id="insertFootnote" class="button-border">
+				<div data-i18n="footnote" role="button" id="insertFootnote" class="button-border">
 
 				</div>
 
-				<div role="button" id="insertEndnote" class="button-border">
+				<div data-i18n="endnote" role="button" id="insertEndnote" class="button-border">
 
 				</div>
 			</div>
@@ -55,11 +55,11 @@
 			<!-- Text box showing the search results -->
 			<div name="ResultBox" id="ResultBox" style="min-width: 300; width: 100%; height: 100%;"></div>
 			<!-- A description of how to use the UI (shown when the search input is empty). -->
-			<div name="Instructions" id="InstructionsBox" style="min-width: 300; width: 100%; height: 100%; display: none;"/>
+			<div data-i18n="instructions" name="Instructions" id="InstructionsBox" style="min-width: 300; width: 100%; height: 100%; display: none;"/>
 		</main>
 
 		<!-- Footer banner -->
-		<footer id="footer" class="proximus-footer"><div>Ontwikkeld door</div><a class="proximus-logo" href="https://www.proximus.com/nl/" target="_blank"></a></footer>
+		<footer data-i18n="footer" id="footer" class="proximus-footer"><div>Ontwikkeld door</div><a class="proximus-logo" href="https://www.proximus.com/nl/" target="_blank"></a></footer>
 	</body>
 
 </html>
