@@ -95,6 +95,7 @@ function localization(displayLanguage: string) {
         document.getElementById('insertEndnote').innerHTML = `<span class="button-label">Eindnoot<br>invoegen</span>`;
         (<HTMLInputElement>document.getElementById('searchFilter')).placeholder = `Vraag het aan OSLO...`;
         document.getElementById('loadingError').innerText = 'Deze extensie werkt enkel vanuit Word 2016';
+        document.getElementById('footer').innerHTML = `<div>Ontwikkeld door</div><a class="proximus-logo" href="https://www.proximus.com/nl/" target="_blank"></a>`
     } else {
         document.getElementById('InstructionsBox').innerHTML = `<p><hr><b>Instructions:</b><br> 
                     In your document, select the text you want to look up in the OSLO Knowledge Vocabulary.
@@ -115,6 +116,7 @@ function localization(displayLanguage: string) {
         document.getElementById('insertEndnote').innerHTML = `<span class="button-label">Insert<br>endnote</span>`;
         (<HTMLInputElement>document.getElementById('searchFilter')).placeholder = `Let's ask OSLO...`;
         document.getElementById('loadingError').innerText = 'This add-in only works for Word 2016 and above.';
+        document.getElementById('footer').innerHTML = `<div>Developed by</div><a class="proximus-logo" href="https://www.proximus.com/nl/" target="_blank"></a>`
     }
 }
 
@@ -534,6 +536,7 @@ function processSelection() {
 
 /** Searches a given phrase in the OSLO data set. */
 function search(searchPhrase: string) {
+    const displayLanguage = Office.context.displayLanguage;
     if (!searchPhrase) {
         // The search box is empty, display the usage instructions
         setResultText("");
@@ -568,12 +571,15 @@ function search(searchPhrase: string) {
 
         // If we can't show all results, add a message
         if (numShown < numResults) {
-            resultText += `<b>Eerste ${numShown} van ${numResults} resultaten</b>`;
+
+            resultText += displayLanguage.toLowerCase() === 'en-us' ?
+                `<b>First ${numShown} of ${numResults} results<br>.Please refine your search</b>` :
+                `<b>Eerste ${numShown} van ${numResults} resultaten<br>Gelieve uw zoekopdracht te verfijnen.</b>`;
         }
     }
 
     // Add the search result HTML to the DOM
-    setResultText("<hr>" + (resultText ? resultText : "Niets gevonden"));
+    setResultText("<hr>" + (resultText ? resultText : displayLanguage.toLowerCase() === 'en-us' ? "Nothing found" : "Niets gevonden"));
 
     if (numResults > 1) {
         // Add click handlers to the checkboxes that were just added to the DOM
