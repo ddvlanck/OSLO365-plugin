@@ -319,7 +319,7 @@ function insertNote(context: Word.RequestContext, selection: Word.Range, selecti
 
 /** Function that changes language based on Office display language **/
 function localize(displayLanguage: string){
-    const translationFile = identifyLocale(displayLanguage);
+    const translationFile = identifyLocale('nl-nl');        // TODO: enable English version
     const elements = document.querySelectorAll('[data-i18n]');
 
     httpRequest("GET", translationFile).then((json: string) => {

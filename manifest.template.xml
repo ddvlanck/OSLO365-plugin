@@ -16,7 +16,7 @@
 	<ProviderName>Vlaamse overheid</ProviderName>
 	<DefaultLocale>nl-BE</DefaultLocale>
 	<DisplayName DefaultValue="OSLO Begrippenkader">
-		<Override Locale="en-us" Value="OSLO Knowledge Vocabulary"/>
+		<!--Override Locale="en-us" Value="OSLO Knowledge Vocabulary"/>-->
 	</DisplayName>
 	<Description DefaultValue="Vlaamse overheid OSLO Word Add-in">
 		<Override Locale="en-us" Value="Open Standards For Linked Organization - Flemish Interoperability initiative Word Add-in"/>
@@ -111,27 +111,27 @@
 			</bt:Urls>
 			<bt:ShortStrings>
 				<bt:String id="GetStarted.Title" DefaultValue="Aan de slag">
-					<Override Locale="en-us" Value="Get started"/>
+					<!--<Override Locale="en-us" Value="Get started"/>-->
 				</bt:String>
 				<bt:String id="OsloRibbonGroup.Label" DefaultValue="Zoeken">
-					<Override Locale="en-us" Value="Search"/>
+					<!--<Override Locale="en-us" Value="Search"/>-->
 				</bt:String>
 				<bt:String id="OsloRibbonButton.Label" DefaultValue="OSLO Begrippenkader">
-					<Override Locale="en-us" Value="OSLO Knowledge Vocabulary"/>
+					<!--<Override Locale="en-us" Value="OSLO Knowledge Vocabulary"/>-->
 				</bt:String>
 				<bt:String id="OsloContextMenu.Label" DefaultValue="Zoek op in OSLO">
-					<Override Locale="en-us" Value="Ask OSLO"/>
+					<!--<Override Locale="en-us" Value="Ask OSLO"/>-->
 				</bt:String>
 			</bt:ShortStrings>
 			<bt:LongStrings>
 				<bt:String id="GetStarted.Description" DefaultValue="De extensie is geladen. Ga naar de Start/Home tab en klik op de 'OSLO Begrippenkader' knop om begrippen te zoeken.">
-					<Override Locale="en-us" Value="The extension is ready. Go to Start/Home tab en click op 'OSLO Knowledge Vocabulary' to start searching the knowledge vocabulary"/>
+					<!--<Override Locale="en-us" Value="The extension is ready. Go to Start/Home tab en click op 'OSLO Knowledge Vocabulary' to start searching the knowledge vocabulary"/>-->
 				</bt:String>
 				<bt:String id="OsloRibbonButton.Description" DefaultValue="Klik om het OSLO zijpaneel te openen">
-					<Override Locale="en-us" Value="Click to open the OSLO side panel"/>
+					<!--<Override Locale="en-us" Value="Click to open the OSLO side panel"/>-->
 				</bt:String>
 				<bt:String id="OsloContextMenu.Description" DefaultValue="Zoek op in OSLO">
-					<Override Locale="en-us" Value="Ask OSLO"/>
+					<!--<Override Locale="en-us" Value="Ask OSLO"/>-->
 				</bt:String>
 			</bt:LongStrings>
 		</Resources>
