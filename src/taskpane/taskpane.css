@@ -67,11 +67,13 @@
  }
 
  .buttonbox {
-    display: flex;
-      flex-direction: row;
-      width: 100%;
-      justify-content: space-between;
-      box-sizing: border-box;
+    height: auto;
+    display: -webkit-flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
   }
 
  .button-border .button-label {
@@ -139,4 +141,8 @@ b {
     background-image: url("https://www.proximus.be/dam/jcr:f63bd103-c4a1-4ce1-b536-554a8017ac99/cdn/sites/support/images/common/logo-proximus-white~2015-11-24-13-13-24~cache.2015-11-24-13-13-24.png");
     background-repeat: no-repeat;
     background-size: contain;
+}
+
+#ResultBox a {
+    word-wrap: break-word;
 }

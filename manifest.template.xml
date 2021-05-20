@@ -13,16 +13,14 @@
 	xsi:type="TaskPaneApp">
 	<Id>57d6f741-c837-4896-9918-ef8e9d555089</Id>
 	<Version>1.0.0.2</Version>
-	<ProviderName>Vlaamse overheid</ProviderName>
+	<ProviderName>Informatie Vlaanderen</ProviderName>
 	<DefaultLocale>nl-BE</DefaultLocale>
 	<DisplayName DefaultValue="OSLO Begrippenkader">
-		<!--Override Locale="en-us" Value="OSLO Knowledge Vocabulary"/>-->
 	</DisplayName>
 	<Description DefaultValue="Vlaamse overheid OSLO Word Add-in">
-		<Override Locale="en-us" Value="Open Standards For Linked Organization - Flemish Interoperability initiative Word Add-in"/>
 	</Description>
-	<IconUrl DefaultValue="{{plugin_host_url}}/assets/vo_logo.png"/>
-	<HighResolutionIconUrl DefaultValue="{{plugin_host_url}}/assets/vo_logo.png"/>
+	<IconUrl DefaultValue="{{plugin_host_url}}/assets/vo_logo_32.png"/>
+	<HighResolutionIconUrl DefaultValue="{{plugin_host_url}}/assets/vo_logo_64.png"/>
 	<SupportUrl DefaultValue="https://data.vlaanderen.be/standaarden/"/>
 	<AppDomains>
 		<AppDomain>{{plugin_host_domain}}</AppDomain>
@@ -101,9 +99,9 @@
 		</Hosts>
 		<Resources>
 			<bt:Images>
-				<bt:Image id="Icon.16x16" DefaultValue="{{plugin_host_url}}/assets/vo_logo.png"/>
-				<bt:Image id="Icon.32x32" DefaultValue="{{plugin_host_url}}/assets/vo_logo.png"/>
-				<bt:Image id="Icon.80x80" DefaultValue="{{plugin_host_url}}/assets/vo_logo.png"/>
+				<bt:Image id="Icon.16x16" DefaultValue="{{plugin_host_url}}/assets/vo_logo_large.png"/>
+				<bt:Image id="Icon.32x32" DefaultValue="{{plugin_host_url}}/assets/vo_logo_large.png"/>
+				<bt:Image id="Icon.80x80" DefaultValue="{{plugin_host_url}}/assets/vo_logo_large.png"/>
 			</bt:Images>
 			<bt:Urls>
 				<bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
@@ -111,27 +109,20 @@
 			</bt:Urls>
 			<bt:ShortStrings>
 				<bt:String id="GetStarted.Title" DefaultValue="Aan de slag">
-					<!--<Override Locale="en-us" Value="Get started"/>-->
 				</bt:String>
 				<bt:String id="OsloRibbonGroup.Label" DefaultValue="Zoeken">
-					<!--<Override Locale="en-us" Value="Search"/>-->
 				</bt:String>
 				<bt:String id="OsloRibbonButton.Label" DefaultValue="OSLO Begrippenkader">
-					<!--<Override Locale="en-us" Value="OSLO Knowledge Vocabulary"/>-->
 				</bt:String>
 				<bt:String id="OsloContextMenu.Label" DefaultValue="Zoek op in OSLO">
-					<!--<Override Locale="en-us" Value="Ask OSLO"/>-->
 				</bt:String>
 			</bt:ShortStrings>
 			<bt:LongStrings>
 				<bt:String id="GetStarted.Description" DefaultValue="De extensie is geladen. Ga naar de Start/Home tab en klik op de 'OSLO Begrippenkader' knop om begrippen te zoeken.">
-					<!--<Override Locale="en-us" Value="The extension is ready. Go to Start/Home tab en click op 'OSLO Knowledge Vocabulary' to start searching the knowledge vocabulary"/>-->
 				</bt:String>
 				<bt:String id="OsloRibbonButton.Description" DefaultValue="Klik om het OSLO zijpaneel te openen">
-					<!--<Override Locale="en-us" Value="Click to open the OSLO side panel"/>-->
 				</bt:String>
 				<bt:String id="OsloContextMenu.Description" DefaultValue="Zoek op in OSLO">
-					<!--<Override Locale="en-us" Value="Ask OSLO"/>-->
 				</bt:String>
 			</bt:LongStrings>
 		</Resources>

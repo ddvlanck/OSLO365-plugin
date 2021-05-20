@@ -55,11 +55,17 @@ module.exports = async (env, options) => {
 				from: "./src/taskpane/taskpane.css",
 				to: "taskpane.css"
 			}, {
-				from: "./assets/vo_logo.png",
-				to: "assets/vo_logo.png"
+				from: "./assets/vo_logo_32.png",
+				to: "assets/vo_logo_32.png"
+			},{
+				from: "./assets/vo_logo_64.png",
+				to: "assets/vo_logo_64.png"	
 			}, {
 				from: "./assets/vo_oslo_logo.png",
 				to: "assets/vo_oslo_logo.png"
+			}, {
+				from: "./assets/vo_logo_large.png",
+				to: "assets/vo_logo_large.png"
 			}, {
 				from: "./src/taskpane/oslo_terminology.json",
 				to: "oslo_terminology.json"

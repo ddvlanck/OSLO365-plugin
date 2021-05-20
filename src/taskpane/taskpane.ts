@@ -10,7 +10,7 @@ namespace AppConfig {
     /** The URL of the Oslo data file. Retrieved with a simple GET. This static resource is replaced with a dynamic backend endpoint in the production environment. */
     export const dataFileUrl = "/oslo_terminology.json";
 
-    export const englishLocale = "/en.json";
+    //export const englishLocale = "/en.json";
     export const dutchLocale = "/nl.json";
 
     /** Set true to enable some trace messages to help debugging. */
@@ -43,8 +43,8 @@ Office.onReady(info => {
     // This add-in is intended to be loaded in Word (2016 Desktop or Online)
     if (info.host === Office.HostType.Word) {
         // Get the display language
-        const displayLanguage = Office.context.displayLanguage;
-        localize(displayLanguage);
+        //const displayLanguage = Office.context.displayLanguage;
+        //localize(displayLanguage);
 
         // Initialize element visibility, register event handlers
         document.getElementById("sideload-msg").style.display = "none";
@@ -340,13 +340,14 @@ function localize(displayLanguage: string){
     })
 }
 
+//TODO: add english support
 function identifyLocale(displayLanguage: string){
     switch (displayLanguage.toLowerCase()) {
         case 'nl-nl':
         case 'nl-be':
             return AppConfig.dutchLocale;
         default:
-            return AppConfig.englishLocale;
+            return AppConfig.dutchLocale;
     }
 }
 
@@ -569,7 +570,8 @@ function search(searchPhrase: string) {
     }
 
     // Add the search result HTML to the DOM
-    setResultText("<hr>" + (resultText ? resultText : displayLanguage.toLowerCase() === 'en-us' ? "Nothing found" : "Niets gevonden"));
+    //setResultText("<hr>" + (resultText ? resultText : displayLanguage.toLowerCase() === 'en-us' ? "Nothing found" : "Niets gevonden"));
+    setResultText("<hr>" + (resultText ? resultText : "Niets gevonden"));
 
     if (numResults > 1) {
         // Add click handlers to the checkboxes that were just added to the DOM

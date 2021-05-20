@@ -40,22 +40,48 @@
 			<!-- Buttons to search registered terms and insert foot/endnotes. -->
 			<div id="buttons" class="buttonbox">
 				<div data-i18n="findNext" role="button" id="findNext" class="button-border">
-
+					<span class="button-label">
+                        Volgende<br>
+                        zoeken
+                    </span>
 				</div>
 
 				<div data-i18n="footnote" role="button" id="insertFootnote" class="button-border">
-
+					<span class="button-label">
+                        Voetnoot<br>
+                        invoegen
+                    </span>
 				</div>
 
 				<div data-i18n="endnote" role="button" id="insertEndnote" class="button-border">
-
+					<span class="button-label">
+                        Eindnoot<br>
+                        invoegen
+                    </span>
 				</div>
 			</div>
 
 			<!-- Text box showing the search results -->
 			<div name="ResultBox" id="ResultBox" style="min-width: 300; width: 100%; height: 100%;"></div>
 			<!-- A description of how to use the UI (shown when the search input is empty). -->
-			<div data-i18n="instructions" name="Instructions" id="InstructionsBox" style="min-width: 300; width: 100%; height: 100%; display: none;"/>
+			<div data-i18n="instructions" name="Instructions" id="InstructionsBox"
+				style="min-width: 300; width: 100%; height: 100%; display: none;">
+				<p>
+					<hr><b>Voeg betekenis toe aan je data</b><br><br>Tijdens het schrijven van je tekst gebruik je deze add-in om
+					betekenis te geven aan de woorden die je selecteert. De betekenis van de woorden werd vastgelegd in het OSLO
+					begrippenkader.
+				<p>
+					<hr><b>Instructies:</b><br>Selecteer in uw document de tekst die u wil opzoeken in het begrippenkader van OSLO.
+				<p>Alternatief kan u ook tekst in het zoekvak hierboven intypen (start met = voor een exacte match, typ enter om te
+					zoeken).
+				<p>Klik op "Volgende zoeken" om zoektermen van de knowledge graph in uw document te vinden.Elke klik zoekt en
+					selecteert de volgende.
+				<p>Eens een zoekterm gevonden en geselecteerd is, kan u op "Voetnoot invoegen" of "Eindnoot invoegen" klikken,
+					om de informatie uit de knowledge graph respectivelijk als voetnoot of eindnoot toe te voegen in uw document.
+				<p>Indien er meerdere zoekresultaten zijn, moet u eerst het vakje aanvinken van de zoekterm die u als voetnoot of
+					eindnoot wil toevoegen.
+				<p></p>
+			</div>
 		</main>
 
 		<!-- Footer banner -->
