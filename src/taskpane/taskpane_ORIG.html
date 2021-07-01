@@ -13,27 +13,18 @@
 
 		<!-- Office JavaScript API -->
 		<script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
-		<script type="text/javascript" src="https://dij151upo6vad.cloudfront.net/2.latest/js/vlaanderen-ui.js"></script>
 
 		<!-- For more information on Office UI Fabric, visit https://developer.microsoft.com/fabric. -->
-		<!--<link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"/>-->
+		<link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"/>
 
 		<!-- Styles for this pane -->
 		<link href="taskpane.css" rel="stylesheet" type="text/css" />
-		<link href="https://dij151upo6vad.cloudfront.net/2.latest/css/vlaanderen-ui-corporate.css" rel="stylesheet" type="text/css" />
-
-
-
 	</head>
 
 	<body class="ms-font-m ms-welcome ms-Fabric">
-
-
 		<header class="header ms-bgColor-neutralLighter">
-
 			<!-- Top banner -->
 			<a class="logo" href="https://overheid.vlaanderen.be/oslo-wat-is-oslo" target="_blank"></a>
-			<h2 class="h2">OSLO</h1>
 		</header>
 
 		<!-- The following section is shown when this page is loaded in a browser outside of Word/O365. -->
@@ -44,32 +35,32 @@
 		<!-- Inside Word, the following section will show instead. -->
 		<main id="app-body" class="main" style="display: none;">
 			<!-- Free-text search input -->
-			<div class="scrollWithPage" id="scrollWithPage">
-				<input data-i18n="searchFilter" role="text" id="searchFilter" class="search-box" placeholder="Vraag het aan OSLO.">
+			<input data-i18n="searchFilter" role="text" id="searchFilter" class="search-box" placeholder="Vraag het aan OSLO.">
 
-				<!-- Buttons to search registered terms and insert foot/endnotes. -->
-				<div id="buttons" class="buttonbox">
-					<div data-i18n="findNext" role="button" id="findNext" class="button-border">
-						<span class="button-label">
-	                        Volgende<br>zoeken
-	                    </span>
-					</div>
-
-					<div data-i18n="footnote" role="button" id="insertFootnote" class="button-border button--disabled">
-						<span class="button-label">
-	                        Voetnoot<br>invoegen
-	                    </span>
-					</div>
-
-					<div data-i18n="endnote" role="button" id="insertEndnote" class="button-border button--disabled">
-						<span class="button-label">
-	                        Eindnoot<br> invoegen
-	                    </span>
-					</div>
+			<!-- Buttons to search registered terms and insert foot/endnotes. -->
+			<div id="buttons" class="buttonbox">
+				<div data-i18n="findNext" role="button" id="findNext" class="button-border">
+					<span class="button-label">
+                        Volgende<br>
+                        zoeken
+                    </span>
 				</div>
 
-</div>
-<div id="clear">&nbsp;</div>
+				<div data-i18n="footnote" role="button" id="insertFootnote" class="button-border">
+					<span class="button-label">
+                        Voetnoot<br>
+                        invoegen
+                    </span>
+				</div>
+
+				<div data-i18n="endnote" role="button" id="insertEndnote" class="button-border">
+					<span class="button-label">
+                        Eindnoot<br>
+                        invoegen
+                    </span>
+				</div>
+			</div>
+
 			<!-- Text box showing the search results -->
 			<div name="ResultBox" id="ResultBox" style="min-width: 300; width: 100%; height: 100%;"></div>
 			<!-- A description of how to use the UI (shown when the search input is empty). -->

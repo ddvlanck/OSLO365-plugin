@@ -51,6 +51,12 @@ module.exports = async (env, options) => {
 				chunks: ["polyfill", "taskpane"]
 			}),
 
+			new HtmlWebpackPlugin({
+				filename: "taskpanetwo.html",
+				template: "./src/taskpane/taskpanetwo.html",
+				chunks: ["polyfill", "taskpane"]
+			}),
+
 			new CopyWebpackPlugin([ {
 				from: "./src/taskpane/taskpane.css",
 				to: "taskpane.css"
@@ -59,7 +65,7 @@ module.exports = async (env, options) => {
 				to: "assets/vo_logo_32.png"
 			},{
 				from: "./assets/vo_logo_64.png",
-				to: "assets/vo_logo_64.png"	
+				to: "assets/vo_logo_64.png"
 			}, {
 				from: "./assets/vo_oslo_logo.png",
 				to: "assets/vo_oslo_logo.png"
