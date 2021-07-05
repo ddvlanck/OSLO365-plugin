@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
@@ -18,60 +18,34 @@
      display: flex;
      flex-direction: column;
  }
-
+ 
  /*
  ul {
      margin: 0;
      padding: 0;
  }
  */
- #clear{
-   display: none;
- }
-
- header h2 {
-    margin-block-start: 0px;
-    margin-block-end: 0px;
-    margin-top: 10px;
-    background: #ffe615;
-    float: left;
-    width: 25%;
-    text-align: center;
-    display: inline-block;
-}
-
- .scrollWithPage.scroll {
-     position: fixed;
-     display: block;
-     clear: both;
-     background: white;
-     box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
-     width: calc(100% - 40px);
-     top: 0px;
-     margin-left: -20px;
-     padding: 6px 20px;
- }
 
  .header {
     padding: 10px 0px 10px 0px;
     display: -webkit-flex;
     display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
     align-items: center;
  }
-
+ 
  .header a.logo {
-     display: inline-block;
-     background-image: url(../../assets/vo_oslo_logo.png);
-     height: 90px;
-     width: 100%;
-     background-repeat: no-repeat;
-     background-size: contain;
-     background-position: center;
-     margin-left: 0;
-     margin-right: 0;
-     width: 65%;
-     float: left;
- }
+    display: inline-block;
+    background-image: url("../../assets/vo_oslo_logo.png");
+    alt: "Vlaamse Overheid OSLO";
+    height: 90px;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-left: 0;
+    margin-right: 0;
+}
 
  .main {
     display: -webkit-flex;
@@ -86,7 +60,7 @@
     flex: 1 0 0;
     padding: 10px 20px;
  }
-
+ 
  .main > h2 {
      width: 100%;
      text-align: center;
@@ -129,15 +103,13 @@
 b {
     font-weight: bold;
 }
-
+ 
 .search-box-label {
     color: #0078d7;
     font-weight: bold;
 }
 
 .search-box {
-    font-family: 'flanders-sans';
-    font-size: 16px;
     /*border: 0.5px solid black;*/
     text-align: left;
     min-width: 200px;

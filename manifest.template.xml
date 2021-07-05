@@ -71,53 +71,29 @@
 								</Control>
 							</Group>
 						</OfficeTab>
-						<CustomTab id="CustomTabOslo">
-							<Group id="OsloRibbonGroupTwo">
-								<Label resid="OsloRibbonGroup.Label"/>
+					</ExtensionPoint>
+
+					<!-- Extend the context menu -->
+					<ExtensionPoint xsi:type="ContextMenu">
+						<OfficeMenu id="ContextMenuText">
+							<Control xsi:type="Button" id="OsloContextMenu">
+								<Label resid="OsloContextMenu.Label"/>
+								<Supertip>
+									<Title resid="OsloContextMenu.Label"/>
+									<Description resid="OsloContextMenu.Description"/>
+								</Supertip>
 								<Icon>
 									<bt:Image size="16" resid="Icon.16x16"/>
 									<bt:Image size="32" resid="Icon.32x32"/>
 									<bt:Image size="80" resid="Icon.80x80"/>
 								</Icon>
-								<Control xsi:type="Button" id="OsloRibbonButtonTwo">
-									<Label resid="OsloRibbonButton.Label"/>
-									<Supertip>
-										<Title resid="OsloRibbonButton.Label"/>
-										<Description resid="OsloRibbonButton.Description"/>
-									</Supertip>
-									<Icon>
-										<bt:Image size="16" resid="Icon.16x16"/>
-										<bt:Image size="32" resid="Icon.32x32"/>
-										<bt:Image size="80" resid="Icon.80x80"/>
-									</Icon>
-									<Action xsi:type="ShowTaskpane">
-										<TaskpaneId>OsloTaskPane</TaskpaneId>
-										<SourceLocation resid="Taskpane.Url"/>
-									</Action>
-								</Control>
-								<Control xsi:type="Button" id="DocumentControle">
-									<Label resid="DocumentControle.Label"/>
-									<Supertip>
-										<Title resid="DocumentControle.Label"/>
-										<Description resid="DocumentControle.Description"/>
-									</Supertip>
-									<Icon>
-										<bt:Image size="16" resid="Icon.16x16"/>
-										<bt:Image size="32" resid="Icon.32x32"/>
-										<bt:Image size="80" resid="Icon.80x80"/>
-									</Icon>
-									<Action xsi:type="ShowTaskpane">
-										<TaskpaneId>OsloTaskPane</TaskpaneId>
-										<SourceLocation resid="Taskpane.UrlTwo"/>
-									</Action>
-								</Control>
-							</Group>
-							<Label resid="OsloRibbonButton.Label"/>
-						</CustomTab>
-
+								<Action xsi:type="ShowTaskpane">
+									<TaskpaneId>OsloTaskPane</TaskpaneId>
+									<SourceLocation resid="Taskpane.Url"/>
+								</Action>
+							</Control>
+						</OfficeMenu>
 					</ExtensionPoint>
-
-
 				</DesktopFormFactor>
 			</Host>
 		</Hosts>
@@ -130,7 +106,6 @@
 			<bt:Urls>
 				<bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
 				<bt:Url id="Taskpane.Url" DefaultValue="{{plugin_host_url}}/taskpane.html"/>
-				<bt:Url id="Taskpane.UrlTwo" DefaultValue="{{plugin_host_url}}/taskpanetwo.html"/>
 			</bt:Urls>
 			<bt:ShortStrings>
 				<bt:String id="GetStarted.Title" DefaultValue="Aan de slag">
@@ -139,8 +114,6 @@
 				</bt:String>
 				<bt:String id="OsloRibbonButton.Label" DefaultValue="OSLO Begrippenkader">
 				</bt:String>
-				<bt:String id="DocumentControle.Label" DefaultValue="Document controle">
-				</bt:String>
 				<bt:String id="OsloContextMenu.Label" DefaultValue="Zoek op in OSLO">
 				</bt:String>
 			</bt:ShortStrings>
@@ -148,8 +121,6 @@
 				<bt:String id="GetStarted.Description" DefaultValue="De extensie is geladen. Ga naar de Start/Home tab en klik op de 'OSLO Begrippenkader' knop om begrippen te zoeken.">
 				</bt:String>
 				<bt:String id="OsloRibbonButton.Description" DefaultValue="Klik om het OSLO zijpaneel te openen">
-				</bt:String>
-				<bt:String id="DocumentControle.Description" DefaultValue="Controleer uw document op overeenkomsten met een van de OSLO-definities.">
 				</bt:String>
 				<bt:String id="OsloContextMenu.Description" DefaultValue="Zoek op in OSLO">
 				</bt:String>
