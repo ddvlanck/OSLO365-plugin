@@ -72,6 +72,7 @@
 							</Group>
 						</OfficeTab>
 						<CustomTab id="CustomTabOslo">
+							<Label resid="OsloTab.Label"/>
 							<Group id="OsloRibbonGroupTwo">
 								<Label resid="OsloRibbonGroup.Label"/>
 								<Icon>
@@ -96,6 +97,7 @@
 									</Action>
 								</Control>
 								<Control xsi:type="Button" id="DocumentControle">
+									<Enabled>False</Enabled>
 									<Label resid="DocumentControle.Label"/>
 									<Supertip>
 										<Title resid="DocumentControle.Label"/>
@@ -112,7 +114,6 @@
 									</Action>
 								</Control>
 							</Group>
-							<Label resid="OsloRibbonButton.Label"/>
 						</CustomTab>
 
 					</ExtensionPoint>
@@ -134,6 +135,8 @@
 			</bt:Urls>
 			<bt:ShortStrings>
 				<bt:String id="GetStarted.Title" DefaultValue="Aan de slag">
+				</bt:String>
+				<bt:String id="OsloTab.Label" DefaultValue="OSLO">
 				</bt:String>
 				<bt:String id="OsloRibbonGroup.Label" DefaultValue="Zoeken">
 				</bt:String>

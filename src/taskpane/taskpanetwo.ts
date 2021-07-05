@@ -14,7 +14,7 @@ namespace AppConfig {
     export const dutchLocale = "/nl.json";
 
     /** Set true to enable some trace messages to help debugging. */
-    export const trace = false;
+    export const trace = true;
 }
 
 /** Delimiters used when splitting text into individual words */
@@ -33,6 +33,9 @@ function trace(text: string) {
     }
 }
 
+let documentContent;
+let documentContentBackup;
+
 /** Logs error messages to the console. */
 function error(text: string) {
     console.error(text);
@@ -49,13 +52,47 @@ Office.onReady(info => {
         // Initialize element visibility, register event handlers
         document.getElementById("sideload-msg").style.display = "none";
         document.getElementById("app-body").style.display = "flex";
-        document.getElementById("searchFilter").onkeyup = onSearchFilterKeyUp;
 
-        document.getElementById("findNext").onclick = onFindNextClicked;
         document.getElementById("insertFootnote").onclick = onInsertFootnoteClicked;
         document.getElementById("insertEndnote").onclick = onInsertEndnoteClicked;
 
-        Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, onWordSelectionChanged);
+        Word.run(function (context) {
+
+            // Queue a command to search the document
+            var searchResults = context.document.body.search('test');
+            context.load(searchResults, 'font');
+            return context.sync().then(function () {
+                console.log('Found count: ' + searchResults.items.length);
+
+                // Queue a set of commands to change the font for each found item.
+                for (var i = 0; i < searchResults.items.length; i++) {
+                   
+                    searchResults.items[i].font.highlightColor = '#FFFF00'; //Yellow
+                   
+                }
+
+                return context.sync();
+            });
+        })
+.catch(function (error) {
+    console.log('Error: ' + JSON.stringify(error));
+    if (error instanceof OfficeExtension.Error) {
+        console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+    }
+});
+
+        
+        
+        
+             
+
+
+        //Office.context.document.addHandlerAsync(Office.EventType.ViewSelectionChanged, searchInDocument);
+
+        searchInDocument();
+
+
+        //Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, onWordSelectionChanged);
 
         searching = false;
 
@@ -63,7 +100,7 @@ Office.onReady(info => {
         try {
             let s = window.sessionStorage;
         } catch (error) {
-            setResultText("De extensie kon niet correct worden geladen. Gelieve in de browser instellingen alle cookies toe te laten, en daarna de pagina te herladen.");
+            //setResultText("De extensie kon niet correct worden geladen. Gelieve in de browser instellingen alle cookies toe te laten, en daarna de pagina te herladen.");
         }
 
         initOsloCache(onCacheInitialized);
@@ -71,87 +108,31 @@ Office.onReady(info => {
 
     function onCacheInitialized() {
         trace('After init');
-        processSelection()
     }
 
-    document.onscroll = function(){
-
-      if(window.scrollY >= 114)
-      {
-        document.getElementById("scrollWithPage").classList.add("scroll");
-        document.getElementById("clear").style.display = "block";
-        document.getElementById("clear").style.marginBottom = "63px";
-      }
-      else
-      {
-        document.getElementById("scrollWithPage").classList.remove("scroll");
-        document.getElementById("clear").style.display = "none";
-        document.getElementById("clear").style.marginBottom = "0px";
-      }
-
-
-    };
 });
 
 
-/** Called when the user selects something in the Word document */
-function onWordSelectionChanged(result: Office.AsyncResult<void>) {
-    processSelection();
-}
 
-/** Keyboard handler for the search box */
-export async function onSearchFilterKeyUp(event: KeyboardEvent) {
-    return Word.run(async context => {
-        const searchPhrase = getSearchText();
-
-        /*if (!searchPhrase || (event.key === "Enter")) {*/
-            // Enter key pressed in the search box, or the box is empty: perform a search (empty search will show help text)
-            trace("Search [" + searchPhrase + "]");
-            search(searchPhrase);
-            await context.sync();
-        /*}*/
-    });
-}
-
-/** Click handler for the "Volgende Zoeken" button. */
-export async function onFindNextClicked() {
+export async function searchInDocument() {
     return Word.run(async function (context) {
-        const selection = context.document.getSelection();
-        selection.load();
-        await context.sync();
 
-        // A Word doc doesn't only consist of characters, but also markup, styles, tables, lists, etc.
-        // Because of this, manipulation of text isn't done with strings, but with Range objects
-        // (which can be imagined as virtual selections parts of the doc)
+      let woordenMetMatch = new Array<Word.Range>();
 
-        // We start with the full document Range
-        const range = context.document.body.getRange();
-
+      const range = context.document.body.getRange();
+      range.load();
+      await context.sync();
+      
+    
         // The document Range consists of a number of paragraph ranges
         let paragraph = range.paragraphs.getFirstOrNullObject();
         paragraph.load();
         await context.sync();
 
         let paragraphIndex = 0;
-        let found = false;
 
-        while (!found && !paragraph.isNullObject) {
-            trace("--- paragraphIndex = " + paragraphIndex);
+        while (!paragraph.isNullObject) {
 
-            let skipParagraph = false;
-
-            // There doesn't seem to be a way to tell which paragraph the current selection is in exactly, so we skip paragraphs until we get there.
-            // Note that even when there is no selection, the selection Range still exists and represents the current caret position.
-            const wordPosition = paragraph.getRange().compareLocationWith(selection);
-            await context.sync();
-
-            if (wordPosition.value === Word.LocationRelation.before) {
-                skipParagraph = true;
-            }
-
-            if (!skipParagraph) {
-                // Break up the paragraph into individual word Ranges
-                trace("<<<" + paragraph.text + ">>>");
 
                 let words = paragraph.split(wordDelimiters, true /* trimDelimiters*/, true /* trimSpacing */);
                 words.load();
@@ -166,33 +147,57 @@ export async function onFindNextClicked() {
                     for (let wordIndex = 0; wordIndex < words.items.length; wordIndex++) {
                         const word = words.items[wordIndex];
 
-                        // Skip all words that come before the caret/selection position
-                        const wordPosition = word.compareLocationWith(selection);
-                        await context.sync();
 
-                        if (wordPosition.value !== Word.LocationRelation.after) {
-                            continue;
-                        }
 
                         // Collect all the words in the paragraph, so we can search through them
                         wordList.push(word);
+
+
+
+
+
+
+
 //						trace(`[${paragraphIndex} ${wordIndex}] ${word.text}`);
                         await context.sync();
                     }
+
+
+
                 }
+
+
+
+
+
 
                 // Search for dictionary words in the collected word list
                 if (wordList.length > 0) {
-                    let result: Word.Range = findNextMatch(wordList);
 
-                    if (result) {
-                        // Select the found text
-                        result.select();
-                        found = true;
-                        searching = true;
-                    }
+                  for(let k = 0; k < wordList.length; k++)
+                  {
+
+
+                    if(search(wordList[k].text.toLowerCase()))
+                    woordenMetMatch.push(wordList[k]);
+
+
+
+                  }
+
+
+
+
+
+
+
+
+
+
+
+
                 }
-            }
+
 
             // Move to the next paragraph
             paragraph = paragraph.getNextOrNullObject();
@@ -201,9 +206,95 @@ export async function onFindNextClicked() {
             paragraphIndex++;
         }
 
+         let j = 0;
+          document.getElementById("current_word").textContent = woordenMetMatch[j].text.toLowerCase();
+
+          const selectionToInsertAfter = woordenMetMatch[j].getRange();
+          selectionToInsertAfter.load();
+          context.sync();
+
+
+
+          document.getElementById("gevondenWoord").style.display = "";
+          document.getElementById("buttons").style.display = "";
+          document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[j].text.toLowerCase());
+          document.getElementById("numResult").textContent = (j+1).toString();
+          document.getElementById("totalResult").textContent = woordenMetMatch.length.toString();
+
+          if(woordenMetMatch.length > 1)
+          {
+
+
+            document.getElementById("prev").style.display = "";
+            document.getElementById("prev").addEventListener("click", function() {
+
+
+              if(j > 0)
+              {
+                document.getElementById("prev").classList.remove("button--disabled")
+                j--;
+
+
+                document.getElementById("numResult").textContent = (j+1).toString();
+                document.getElementById("current_word").textContent = woordenMetMatch[j].text.toLowerCase();
+
+                const selectionToInsertAfter = woordenMetMatch[j].getRange();
+                selectionToInsertAfter.select();
+                context.sync();
+
+                document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[j].text.toLowerCase());
+              }
+
+              if(j == 0)
+              {
+                document.getElementById("prev").classList.add("button--disabled");
+                document.getElementById("next").classList.remove("button--disabled");
+              }
+
+
+
+
+
+            });
+
+            document.getElementById("next").style.display = "";
+            document.getElementById("next").classList.remove("button--disabled");
+            document.getElementById("next").addEventListener("click", function() {
+
+
+              if(j< woordenMetMatch.length - 1)
+              {
+                document.getElementById("prev").classList.remove("button--disabled")
+                j++;
+                document.getElementById("current_word").textContent = woordenMetMatch[j].text.toLowerCase();
+
+                const selectionToInsertAfter = woordenMetMatch[j].getRange();
+                selectionToInsertAfter.select();
+                context.sync();
+
+                document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[j].text.toLowerCase());
+                document.getElementById("numResult").textContent = (j+1).toString();
+              }
+
+              if(j == woordenMetMatch.length - 1)
+              {
+                document.getElementById("prev").classList.remove("button--disabled");
+                document.getElementById("next").classList.add("button--disabled");
+              }
+
+
+
+
+            });
+
+          }
+
+
         return context.sync();
     });
 }
+
+/** Click handler for the "Volgende Zoeken" button. */
 
 /** Helper function to compare two numbers (for sorting) */
 function compareInt(a: number, b: number): number {
@@ -218,6 +309,7 @@ function findNextMatch(wordList: Array<Word.Range>): Word.Range {
     for (let i = 0; i < wordList.length; i++) {
         const word = wordList[i];
         const wordText = word.text.toLowerCase();
+
 
         // For each word, see if we have a matching bucket (key = first word of the key phrase)
         let bucket = lookup.get(wordText);
@@ -262,6 +354,7 @@ function findNextMatch(wordList: Array<Word.Range>): Word.Range {
     // Nothing found in the given word list (paragraph)
     return null;
 }
+
 
 /** Click handler for button to insert a footnote in the Word doc */
 export async function onInsertFootnoteClicked() {
@@ -334,41 +427,6 @@ function insertNote(context: Word.RequestContext, selection: Word.Range, selecti
         const noteText = createNoteText(entry.description, entry.reference);
         const xml = useEndnote ? createEndnoteXml(noteText) : createFootnoteXml(noteText);
         selectionToInsertAfter.insertOoxml(xml, "After");
-    }
-}
-
-
-/** Function that changes language based on Office display language **/
-function localize(displayLanguage: string){
-    const translationFile = identifyLocale('nl-nl');        // TODO: enable English version
-    const elements = document.querySelectorAll('[data-i18n]');
-
-    httpRequest("GET", translationFile).then((json: string) => {
-        //TODO: error handling?
-
-        const data = JSON.parse(json);
-        elements.forEach(element => {
-
-            const attributeValue = (<HTMLElement>element).dataset.i18n;
-            const text = data[attributeValue];
-
-            if(attributeValue === 'searchFilter'){
-                (<HTMLElement>element).setAttribute('placeholder', text);
-            } else {
-                element.innerHTML = text;
-            }
-        })
-    })
-}
-
-//TODO: add english support
-function identifyLocale(displayLanguage: string){
-    switch (displayLanguage.toLowerCase()) {
-        case 'nl-nl':
-        case 'nl-be':
-            return AppConfig.dutchLocale;
-        default:
-            return AppConfig.dutchLocale;
     }
 }
 
@@ -515,45 +573,10 @@ function parseOsloResult(elasticData: any): IOsloItem[] {
     return data;
 }
 
-/** Uses the current selection to perform a search in the OSLO data set. */
-function processSelection() {
-    // Callback after reading selected text
-    let onDataSelected = function (asyncResult) {
-        let error = asyncResult.error;
-
-        if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-            error("Selection failed: " + error.name + "; " + error.message);
-        } else {
-            // The selected text is used as a search phrase
-            let searchPhrase = asyncResult.value ? asyncResult.value.trim() : "";
-
-            if (searching) {
-                // When using the "Volgende Zoeken" button, enforce exact matching
-                searchPhrase = searchPhrase ? ("=" + searchPhrase) : "";
-                searching = false;
-            }
-            trace("processSelection [" + searchPhrase + "]");
-            setSearchText(searchPhrase);
-            search(searchPhrase);
-        }
-    }
-
-    // Get the currently selected text from the Word document, and process it
-    Office.context.document.getSelectedDataAsync(
-        Office.CoercionType.Text,
-        {valueFormat: "unformatted", filterType: "all"},
-        onDataSelected
-    );
-}
 
 /** Searches a given phrase in the OSLO data set. */
 function search(searchPhrase: string) {
     const displayLanguage = Office.context.displayLanguage;
-    if (!searchPhrase) {
-        // The search box is empty, display the usage instructions
-        setResultText("");
-        return;
-    }
 
     // If the search phrase begins with an equals char, perform an exact match (otherwise a "contains" match)
     const exactMatch = (searchPhrase.charAt(0) == "=");
@@ -592,33 +615,12 @@ function search(searchPhrase: string) {
 
     // Add the search result HTML to the DOM
     //setResultText("<hr>" + (resultText ? resultText : displayLanguage.toLowerCase() === 'en-us' ? "Nothing found" : "Niets gevonden"));
-    setResultText("<hr>" + (resultText ? resultText : "Niets gevonden"));
+    //setResultText("<hr>" + (resultText ? resultText : "Niets gevonden"));
 
-    document.getElementById("insertFootnote").classList.add("button--disabled");
-    document.getElementById("insertEndnote").classList.add("button--disabled");
-
-    if (numResults > 1) {
-        // Add click handlers to the checkboxes that were just added to the DOM
-        let i = 0;
-
-        for (const checkbox of getCheckBoxes()) {
-            checkbox.onclick = onOsloItemClick(i);
-
-            if (i === 0) {
-                // At first, check the first one
-                checkbox.checked = true;
-            }
-
-            i++;
-        }
-
-        // activeer invoegknoppen
-        document.getElementById("insertFootnote").classList.remove("button--disabled");
-        document.getElementById("insertEndnote").classList.remove("button--disabled");
-
-    }
+    return resultText;
 
 }
+
 
 /** Creates the HTML text for one search result item. */
 function createSearchResultItemHtml(index, numResults, keyphrase: string, description: string, referenceUrl: string): string {
@@ -645,6 +647,11 @@ function createSearchResultItemHtml(index, numResults, keyphrase: string, descri
 /** Event handler for the checkbox click. */
 export function onOsloItemClick(index: number): (this: GlobalEventHandlers, ev: MouseEvent) => any {
     return async function (event: MouseEvent) {
+
+      // activeer invoegknoppen
+      document.getElementById("insertFootnote").classList.remove("button--disabled");
+      document.getElementById("insertEndnote").classList.remove("button--disabled");
+
         let i = 0;
 
         // Check the clicked checkbox, uncheck the others (radio-button behavior)
@@ -667,22 +674,6 @@ function getSearchText(): string {
     return (<HTMLInputElement>document.getElementById("searchFilter")).value.trim().toLowerCase();
 }
 
-/** Sets the HTML text of the search results box. */
-function setResultText(html: string) {
-    if (html) {
-        document.getElementById("ResultBox").innerHTML = html;
-        document.getElementById("InstructionsBox").style.display = "none";
-        document.getElementById("ResultBox").style.display = null;
-    } else {
-        // If the search result is empty, show the hepl instructions instead
-        document.getElementById("InstructionsBox").style.display = "";
-        document.getElementById("ResultBox").style.display = "none";
-
-        // deactiveer invoegknoppen
-        document.getElementById("insertFootnote").classList.add("button--disabled");
-        document.getElementById("insertEndnote").classList.add("button--disabled");
-    }
-}
 
 /** Finds and returns all checkbox HTML elements, which are used to select one of the search results. */
 function getCheckBoxes(): HTMLInputElement[] {

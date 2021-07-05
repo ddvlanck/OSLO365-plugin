@@ -13,11 +13,63 @@
 
  body {
      overflow-x: hidden;
-     overflow-y: scroll;
      -ms-overflow-style: scrollbar;
      display: flex;
      flex-direction: column;
  }
+
+ .button-transparent {
+    background-color: transparent !important;
+    padding: 8px 0px 0px 0px !important;
+    margin: 0px !important;
+}
+
+.button-transparent span {
+    color: black !important;
+}
+
+ #tools {
+    padding: 8px 0px;
+    position: fixed;
+    bottom: 0;
+    background: #ffe615;
+    width: 100%;
+    text-align: center;
+}
+
+#tools .button-border {
+    margin: 0px;
+}
+
+#tools .button-border:first-child {
+    margin-right: 10px;
+}
+
+#ResultBox{
+  padding-right: 10px;
+}
+
+/* width */
+#ResultBox::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+#ResultBox::-webkit-scrollbar-track {
+  background: lightgrey;
+  border-radius: 10px;
+}
+
+/* Handle */
+#ResultBox::-webkit-scrollbar-thumb {
+  background: grey;
+  height: 80px;
+  border-radius: 10px;
+}
+
+
+
+
 
  /*
  ul {
@@ -105,10 +157,21 @@
  .button-border .button-label {
   color: white;
   text-align: center;
+  padding: 5px;
+}
+
+div#ResultBox {
+    margin-top: 15px;
+}
+
+h2#gevondenWoord {
+   margin-block-start: 0px;
+   margin-block-end: 0px;
 }
 
 .button-border {
 	margin-top: 10px;
+  margin-bottom: 10px;
     background-color: #0078d7;
     border-color: #0078d7;
 
