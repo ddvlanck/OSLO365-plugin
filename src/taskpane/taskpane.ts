@@ -38,6 +38,11 @@ function error(text: string) {
     console.error(text);
 }
 
+function getButton()
+{
+  console.log("e");
+}
+
 /** Office calls this onReady handler to initialize the plugin */
 Office.onReady(info => {
     // This add-in is intended to be loaded in Word (2016 Desktop or Online)

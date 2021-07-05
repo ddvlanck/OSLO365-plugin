@@ -22,12 +22,6 @@
 		<link href="taskpane.css" rel="stylesheet" type="text/css" />
 		<link href="https://dij151upo6vad.cloudfront.net/2.latest/css/vlaanderen-ui-corporate.css" rel="stylesheet" type="text/css" />
 
-		<style>
-			#ResultBox:empty::before{
-				content: "Uw tekst bevat geen woorden met een definitie in OSLO. Probeer het later nog eens.";
-			}
-		</style>
-
 
 
 	</head>
@@ -50,41 +44,7 @@
 		<!-- Inside Word, the following section will show instead. -->
 		<main id="app-body" class="main" style="display: none;">
 
-			<h2 class="h2" id="gevondenWoord" style="text-align: left; display: none;">Gevonden definities voor<br><strong><span id="current_word">?</span></strong></h2>
-
-			<div id="buttons" class="buttonbox" style="display: none;">
-				<div data-i18n="findNext" role="button" id="prev" class="button-border button--disabled">
-					<span class="button-label">&nbsp;&nbsp;&lt;&nbsp;Vorige&nbsp;&nbsp;</span>
-				</div>
-
-				<div style="line-height: 48px;"><span id="numResult"></span>/<span id="totalResult"></span></div>
-
-				<div data-i18n="endnote" role="button" id="next" class="button-border button--disabled">
-					<span class="button-label">&nbsp;&nbsp;Volgende&nbsp;&gt;&nbsp;&nbsp;</span>
-				</div>
-			</div>
-			<div name="ResultBox" id="ResultBox" style="min-width: 300; width: 100%; height: calc(100vh - 330px); overflow-y: scroll;"></div>
 		</main>
-		<div id="tools">
-			<div id="buttons">
-				<div id="insertFootnote" class="button-border">
-					<span class="button-label">Voetnoot invoegen</span>
-				</div>
-
-
-				<div id="insertEndnote" class="button-border">
-					<span class="button-label">Eindnoot invoegen</span>
-				</div>
-
-				<div id="next" class="button-border button-transparent">
-					<span class="button-label">Eenmaal negeren</span>
-				</div>
-
-				<div id="next" class="button-border button-transparent">
-					<span class="button-label">Alles negeren</span>
-				</div>
-			</div>
-		</div>
 
 		<!-- Footer banner -->
 		<footer data-i18n="footer" id="footer" class="proximus-footer"><div>Ontwikkeld door</div><a class="proximus-logo" href="https://www.proximus.com/nl/" target="_blank"></a></footer>
