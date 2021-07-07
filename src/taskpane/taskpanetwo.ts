@@ -116,6 +116,9 @@ Office.onReady((info) => {
 
 export async function searchInDocument() {
   return Word.run(async function (context) {
+    // Wanneer het document veel woorden bevat, kan het laden even duren. Informeer de gebruiker:
+    document.getElementById("ResultBox").innerHTML = "<img src='assets/loading.gif' height='50px'><br><br>Even geduld, uw tekst wordt geanalyseerd...";
+
     let woordenMetMatch = new Array<Word.Range>();
 
     const range = context.document.body.getRange();
@@ -165,21 +168,26 @@ export async function searchInDocument() {
       paragraphIndex++;
     }
 
+    if (woordenMetMatch.length >= 1) {
     let j = 0;
-    document.getElementById("current_word").textContent = woordenMetMatch[j].text.toLowerCase();
 
+    document.getElementById("current_word").textContent = woordenMetMatch[j].text.toLowerCase();
     document.getElementById("gevondenWoord").style.display = "";
-    document.getElementById("buttons").style.display = "";
+
+   
+      document.getElementById("buttons").style.display = "";
+    
+    
     document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[j].text.toLowerCase());
     document.getElementById("numResult").textContent = (j + 1).toString();
     document.getElementById("totalResult").textContent = woordenMetMatch.length.toString();
 
-    if (woordenMetMatch.length > 1) {
+    
       document.getElementById("prev").style.display = "";
       document.getElementById("prev").addEventListener("click", function () {
-        if (!document.getElementById("prev").classList.contains("button--disabled")) {
+          
+
           if (j > 0) {
-            document.getElementById("prev").classList.remove("button--disabled");
             j--;
 
             document.getElementById("numResult").textContent = (j + 1).toString();
@@ -192,39 +200,37 @@ export async function searchInDocument() {
             document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[j].text.toLowerCase());
           }
 
-          if (j == 0) {
-            document.getElementById("prev").classList.add("button--disabled");
-            document.getElementById("next").classList.remove("button--disabled");
-          }
-        }
+          
+
       });
 
       document.getElementById("next").style.display = "";
-      document.getElementById("next").classList.remove("button--disabled");
       document.getElementById("next").addEventListener("click", function () {
-        if (!document.getElementById("next").classList.contains("button--disabled")) {
+        
+
           if (j < woordenMetMatch.length - 1) {
-            document.getElementById("prev").classList.remove("button--disabled");
+
             j++;
             document.getElementById("current_word").textContent = woordenMetMatch[j].text.toLowerCase();
 
-            //const selectionToInsertAfter = woordenMetMatch[j].getRange();
-            //selectionToInsertAfter.select();
-            //context.sync();
+            const wordToSelect = woordenMetMatch[j].getRange();
+            wordToSelect.select();
+            context.sync();
 
             document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[j].text.toLowerCase());
             document.getElementById("numResult").textContent = (j + 1).toString();
           }
 
-          if (j == woordenMetMatch.length - 1) {
-            document.getElementById("prev").classList.remove("button--disabled");
-            document.getElementById("next").classList.add("button--disabled");
-          }
-        }
       });
     }
+    else
+    {
+      document.getElementById("gevondenWoord").style.display = "none";
+    document.getElementById("buttons").style.display = "none";
+      document.getElementById("ResultBox").innerHTML = "";
+    }
 
-    console.log(woordenMetMatch);
+    
     return context.sync();
   });
 }
@@ -591,8 +597,6 @@ function createSearchResultItemHtml(
 export function onOsloItemClick(index: number): (this: GlobalEventHandlers, ev: MouseEvent) => any {
   return async function (event: MouseEvent) {
     // activeer invoegknoppen
-    document.getElementById("insertFootnote").classList.remove("button--disabled");
-    document.getElementById("insertEndnote").classList.remove("button--disabled");
 
     let i = 0;
 

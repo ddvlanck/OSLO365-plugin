@@ -73,10 +73,52 @@ module.exports = async (env, options) => {
 			}, {
 				from: "./assets/vo_logo_large.png",
 				to: "assets/vo_logo_large.png"
-			}, {
+			},
+			{
+				from: "./assets/icons/80x80/about.png",
+				to: "assets/icons/80x80/about.png"
+			},
+			{
+				from: "./assets/icons/32x32/about.png",
+				to: "assets/icons/32x32/about.png"
+			},
+			{
+				from: "./assets/icons/16x16/about.png",
+				to: "assets/icons/16x16/about.png"
+			},
+			{
+				from: "./assets/icons/80x80/help.png",
+				to: "assets/icons/80x80/about.png"
+			},
+			{
+				from: "./assets/icons/32x32/help.png",
+				to: "assets/icons/32x32/about.png"
+			},
+			{
+				from: "./assets/icons/16x16/help.png",
+				to: "assets/icons/16x16/about.png"
+			},
+			{
+				from: "./assets/loading.gif",
+				to: "assets/loading.gif"
+			},
+			{
+				from: "./assets/icons/80x80/documentcontrole.png",
+				to: "assets/icons/80x80/documentcontrole.png"
+			},
+			{
+				from: "./assets/icons/32x32/documentcontrole.png",
+				to: "assets/icons/32x32/documentcontrole.png"
+			},
+			{
+				from: "./assets/icons/16x16/documentcontrole.png",
+				to: "assets/icons/16x16/documentcontrole.png"
+			},
+			{
 				from: "./src/taskpane/oslo_terminology.json",
 				to: "oslo_terminology.json"
-			}, {
+			},
+			{
 				from: "./manifest.template.xml",
 				to: "manifest.xml",
 				transform: (content, path) => replace_placeholders_dist(content)

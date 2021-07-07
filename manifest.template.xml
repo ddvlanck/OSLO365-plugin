@@ -104,13 +104,53 @@
 										<Description resid="DocumentControle.Description"/>
 									</Supertip>
 									<Icon>
-										<bt:Image size="16" resid="Icon.16x16"/>
-										<bt:Image size="32" resid="Icon.32x32"/>
-										<bt:Image size="80" resid="Icon.80x80"/>
+										<bt:Image size="16" resid="IconDocControle.16x16"/>
+										<bt:Image size="32" resid="IconDocControle.32x32"/>
+										<bt:Image size="80" resid="IconDocControle.80x80"/>
 									</Icon>
 									<Action xsi:type="ShowTaskpane">
 										<TaskpaneId>OsloTaskPane</TaskpaneId>
 										<SourceLocation resid="Taskpane.UrlTwo"/>
+									</Action>
+								</Control>
+							</Group>
+							<Group id="OsloRibbonGroupThree">
+								<Label resid="OsloRibbonGroupInfo.Label"/>
+								<Icon>
+									<bt:Image size="16" resid="IconAbout.16x16"/>
+									<bt:Image size="32" resid="IconAbout.32x32"/>
+									<bt:Image size="80" resid="IconAbout.80x80"/>
+								</Icon>
+								<Control xsi:type="Button" id="Help">
+									<Label resid="Help.Label"/>
+									<Supertip>
+										<Title resid="Help.Label"/>
+										<Description resid="Help.Description"/>
+									</Supertip>
+									<Icon>
+									<bt:Image size="16" resid="IconHelp.16x16"/>
+									<bt:Image size="32" resid="IconHelp.32x32"/>
+									<bt:Image size="80" resid="IconHelp.80x80"/>
+									</Icon>
+									<Action xsi:type="ShowTaskpane">
+										<TaskpaneId>OsloTaskPane</TaskpaneId>
+										<SourceLocation resid="Taskpane.Help"/>
+									</Action>
+								</Control>
+								<Control xsi:type="Button" id="About">
+									<Label resid="About.Label"/>
+									<Supertip>
+										<Title resid="About.Label"/>
+										<Description resid="About.Description"/>
+									</Supertip>
+									<Icon>
+									<bt:Image size="16" resid="IconAbout.16x16"/>
+									<bt:Image size="32" resid="IconAbout.32x32"/>
+									<bt:Image size="80" resid="IconAbout.80x80"/>
+									</Icon>
+									<Action xsi:type="ShowTaskpane">
+										<TaskpaneId>OsloTaskPane</TaskpaneId>
+										<SourceLocation resid="Taskpane.About"/>
 									</Action>
 								</Control>
 							</Group>
@@ -127,22 +167,39 @@
 				<bt:Image id="Icon.16x16" DefaultValue="{{plugin_host_url}}/assets/vo_logo_large.png"/>
 				<bt:Image id="Icon.32x32" DefaultValue="{{plugin_host_url}}/assets/vo_logo_large.png"/>
 				<bt:Image id="Icon.80x80" DefaultValue="{{plugin_host_url}}/assets/vo_logo_large.png"/>
+				<bt:Image id="IconAbout.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/about.png"/>
+				<bt:Image id="IconAbout.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/about.png"/>
+				<bt:Image id="IconAbout.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/about.png"/>
+				<bt:Image id="IconHelp.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/help.png"/>
+				<bt:Image id="IconHelp.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/help.png"/>
+				<bt:Image id="IconHelp.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/help.png"/>
+				<bt:Image id="IconDocControle.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/documentcontrole.png"/>
+				<bt:Image id="IconDocControle.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/documentcontrole.png"/>
+				<bt:Image id="IconDocControle.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/documentcontrole.png"/>
 			</bt:Images>
 			<bt:Urls>
 				<bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
 				<bt:Url id="Taskpane.Url" DefaultValue="{{plugin_host_url}}/taskpane.html"/>
 				<bt:Url id="Taskpane.UrlTwo" DefaultValue="{{plugin_host_url}}/taskpanetwo.html"/>
+				<bt:Url id="Taskpane.Help" DefaultValue="{{plugin_host_url}}/taskpane-help.html"/>
+				<bt:Url id="Taskpane.About" DefaultValue="https://overheid.vlaanderen.be/oslo-wat-is-oslo"/>
 			</bt:Urls>
 			<bt:ShortStrings>
 				<bt:String id="GetStarted.Title" DefaultValue="Aan de slag">
 				</bt:String>
 				<bt:String id="OsloTab.Label" DefaultValue="OSLO">
 				</bt:String>
-				<bt:String id="OsloRibbonGroup.Label" DefaultValue="Zoeken">
+				<bt:String id="OsloRibbonGroup.Label" DefaultValue="Functies">
+				</bt:String>
+				<bt:String id="OsloRibbonGroupInfo.Label" DefaultValue="Info">
 				</bt:String>
 				<bt:String id="OsloRibbonButton.Label" DefaultValue="OSLO Begrippenkader">
 				</bt:String>
 				<bt:String id="DocumentControle.Label" DefaultValue="Document controle">
+				</bt:String>
+				<bt:String id="Help.Label" DefaultValue="Hoe werkt OSLO?">
+				</bt:String>
+				<bt:String id="About.Label" DefaultValue="Wat is OSLO?">
 				</bt:String>
 				<bt:String id="OsloContextMenu.Label" DefaultValue="Zoek op in OSLO">
 				</bt:String>
@@ -153,6 +210,10 @@
 				<bt:String id="OsloRibbonButton.Description" DefaultValue="Klik om het OSLO zijpaneel te openen">
 				</bt:String>
 				<bt:String id="DocumentControle.Description" DefaultValue="Controleer uw document op overeenkomsten met een van de OSLO-definities.">
+				</bt:String>
+				<bt:String id="Help.Description" DefaultValue="Bekijk hier hoe de OSLO-tool werkt.">
+				</bt:String>
+				<bt:String id="About.Description" DefaultValue="Wat is OSLO?">
 				</bt:String>
 				<bt:String id="OsloContextMenu.Description" DefaultValue="Zoek op in OSLO">
 				</bt:String>
