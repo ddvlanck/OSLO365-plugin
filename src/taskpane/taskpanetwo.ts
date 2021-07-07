@@ -43,6 +43,7 @@ const wordDelimiters = [
   "|",
   "*",
   "+",
+  ""
 ];
 
 /** Is true when performing a word search */
@@ -58,6 +59,9 @@ function trace(text: string) {
   }
 }
 
+let woordenMetMatch = new Array<Word.Range>();
+let wordsToIgnore = new Array<String>();
+let shownResult = 0;
 let documentContent = "";
 let documentContentBackup = "/";
 let typing = false;
@@ -81,8 +85,11 @@ Office.onReady((info) => {
 
     document.getElementById("insertFootnote").onclick = onInsertFootnoteClicked;
     document.getElementById("insertEndnote").onclick = onInsertEndnoteClicked;
+    document.getElementById("ignoreAll").onclick = ignoreAll;
 
     searching = false;
+
+    
 
     // There's a bug in the office.js libraries, causing an exception in some browsers when 3rd party cookies are blocked. Notify the user why the plugin doesn't work.
     try {
@@ -92,6 +99,43 @@ Office.onReady((info) => {
     }
 
     Word.run(async function (context) {
+
+      document.getElementById("next").addEventListener("click", function () {
+        if (shownResult < woordenMetMatch.length - 1) {
+  
+          shownResult++;
+          document.getElementById("current_word").textContent = woordenMetMatch[shownResult].text.toLowerCase();
+  
+          const wordToSelect = woordenMetMatch[shownResult].getRange();
+          wordToSelect.select();
+          context.sync();
+  
+          document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[shownResult].text.toLowerCase());
+          document.getElementById("numResult").textContent = (shownResult + 1).toString();
+        }
+
+        changeNavButtonState();
+  
+    });
+
+    document.getElementById("prev").addEventListener("click", function () {
+      if (shownResult > 0) {
+        shownResult--;
+
+        document.getElementById("numResult").textContent = (shownResult + 1).toString();
+        document.getElementById("current_word").textContent = woordenMetMatch[shownResult].text.toLowerCase();
+        document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[shownResult].text.toLowerCase());
+
+        document.getElementById("prev").classList.remove("button--disabled");
+        
+      }
+      
+      changeNavButtonState();
+
+      
+
+  });
+    
       while (1) {
         const range = context.document.body.getRange();
         range.load();
@@ -114,12 +158,34 @@ Office.onReady((info) => {
   }
 });
 
+function ignoreAll()
+{
+  Word.run(async function (context) {
+    wordsToIgnore.push(woordenMetMatch[shownResult].text);
+    context.sync();
+    searchInDocument();
+  });
+}
+
+function changeNavButtonState()
+{
+  if(shownResult == 0) document.getElementById("prev").classList.add("button--disabled");
+  else document.getElementById("prev").classList.remove("button--disabled");
+
+  if(shownResult == woordenMetMatch.length - 1) document.getElementById("next").classList.add("button--disabled");
+  else document.getElementById("next").classList.remove("button--disabled");
+      
+}
+
 export async function searchInDocument() {
   return Word.run(async function (context) {
+    changeNavButtonState();
+    shownResult = 0;
+
     // Wanneer het document veel woorden bevat, kan het laden even duren. Informeer de gebruiker:
     document.getElementById("ResultBox").innerHTML = "<img src='assets/loading.gif' height='50px'><br><br>Even geduld, uw tekst wordt geanalyseerd...";
 
-    let woordenMetMatch = new Array<Word.Range>();
+    woordenMetMatch = new Array<Word.Range>();
 
     const range = context.document.body.getRange();
     range.load();
@@ -154,10 +220,12 @@ export async function searchInDocument() {
         }
       }
 
+      
+
       // Search for dictionary words in the collected word list
       if (wordList.length > 0) {
         for (let k = 0; k < wordList.length; k++) {
-          if (search(wordList[k].text.toLowerCase())) woordenMetMatch.push(wordList[k]);
+          if (search(wordList[k].text.toLowerCase()) && !(wordsToIgnore.includes(wordList[k].text))) woordenMetMatch.push(wordList[k]);
         }
       }
 
@@ -169,64 +237,28 @@ export async function searchInDocument() {
     }
 
     if (woordenMetMatch.length >= 1) {
-    let j = 0;
+    
 
-    document.getElementById("current_word").textContent = woordenMetMatch[j].text.toLowerCase();
+    document.getElementById("current_word").textContent = woordenMetMatch[shownResult].text.toLowerCase();
     document.getElementById("gevondenWoord").style.display = "";
-
-   
-      document.getElementById("buttons").style.display = "";
-    
-    
-    document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[j].text.toLowerCase());
-    document.getElementById("numResult").textContent = (j + 1).toString();
+    document.getElementById("tools").style.display = "block";
+    document.getElementById("buttons").style.display = "";
+    document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[shownResult].text.toLowerCase());
+    document.getElementById("numResult").textContent = (shownResult + 1).toString();
     document.getElementById("totalResult").textContent = woordenMetMatch.length.toString();
 
     
       document.getElementById("prev").style.display = "";
-      document.getElementById("prev").addEventListener("click", function () {
-          
-
-          if (j > 0) {
-            j--;
-
-            document.getElementById("numResult").textContent = (j + 1).toString();
-            document.getElementById("current_word").textContent = woordenMetMatch[j].text.toLowerCase();
-
-            const selectionToInsertAfter = woordenMetMatch[j].getRange();
-            selectionToInsertAfter.select();
-            context.sync();
-
-            document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[j].text.toLowerCase());
-          }
-
-          
-
-      });
+      
 
       document.getElementById("next").style.display = "";
-      document.getElementById("next").addEventListener("click", function () {
-        
-
-          if (j < woordenMetMatch.length - 1) {
-
-            j++;
-            document.getElementById("current_word").textContent = woordenMetMatch[j].text.toLowerCase();
-
-            const wordToSelect = woordenMetMatch[j].getRange();
-            wordToSelect.select();
-            context.sync();
-
-            document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[j].text.toLowerCase());
-            document.getElementById("numResult").textContent = (j + 1).toString();
-          }
-
-      });
+      
     }
     else
     {
       document.getElementById("gevondenWoord").style.display = "none";
     document.getElementById("buttons").style.display = "none";
+    document.getElementById("tools").style.display = "none";
       document.getElementById("ResultBox").innerHTML = "";
     }
 
