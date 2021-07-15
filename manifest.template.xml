@@ -36,7 +36,7 @@
 		<Hosts>
 			<Host xsi:type="Document">
 				<DesktopFormFactor>
-
+					<FunctionFile resid="residDesktopFuncUrl" />
 					<GetStarted>
 						<Title resid="GetStarted.Title"/>
 						<Description resid="GetStarted.Description"/>
@@ -68,6 +68,7 @@
 										<TaskpaneId>OsloTaskPane</TaskpaneId>
 										<SourceLocation resid="Taskpane.Url"/>
 									</Action>
+									<Enabled>false</Enabled>
 								</Control>
 							</Group>
 						</OfficeTab>
@@ -87,17 +88,17 @@
 										<Description resid="OsloRibbonButton.Description"/>
 									</Supertip>
 									<Icon>
-										<bt:Image size="16" resid="Icon.16x16"/>
-										<bt:Image size="32" resid="Icon.32x32"/>
-										<bt:Image size="80" resid="Icon.80x80"/>
+										<bt:Image size="16" resid="IconBegrippenkader.16x16"/>
+										<bt:Image size="32" resid="IconBegrippenkader.32x32"/>
+										<bt:Image size="80" resid="IconBegrippenkader.80x80"/>
 									</Icon>
 									<Action xsi:type="ShowTaskpane">
 										<TaskpaneId>OsloTaskPane</TaskpaneId>
 										<SourceLocation resid="Taskpane.Url"/>
 									</Action>
+									<Enabled>false</Enabled>
 								</Control>
 								<Control xsi:type="Button" id="DocumentControle">
-									<Enabled>False</Enabled>
 									<Label resid="DocumentControle.Label"/>
 									<Supertip>
 										<Title resid="DocumentControle.Label"/>
@@ -112,8 +113,27 @@
 										<TaskpaneId>OsloTaskPane</TaskpaneId>
 										<SourceLocation resid="Taskpane.UrlTwo"/>
 									</Action>
+									<Enabled>false</Enabled>
+								</Control>
+								<Control xsi:type="Button" id="MijnWoordenboek">
+									<Label resid="MijnWoordenboek.Label"/>
+									<Supertip>
+										<Title resid="MijnWoordenboek.Label"/>
+										<Description resid="MijnWoordenboek.Description"/>
+									</Supertip>
+									<Icon>
+										<bt:Image size="16" resid="IconMijnWoordenboek.16x16"/>
+										<bt:Image size="32" resid="IconMijnWoordenboek.32x32"/>
+										<bt:Image size="80" resid="IconMijnWoordenboek.80x80"/>
+									</Icon>
+									<Action xsi:type="ShowTaskpane">
+										<TaskpaneId>OsloTaskPane</TaskpaneId>
+										<SourceLocation resid="Taskpane.MijnWoordenboek"/>
+									</Action>
+									<Enabled>false</Enabled>
 								</Control>
 							</Group>
+							
 							<Group id="OsloRibbonGroupThree">
 								<Label resid="OsloRibbonGroupInfo.Label"/>
 								<Icon>
@@ -121,6 +141,25 @@
 									<bt:Image size="32" resid="IconAbout.32x32"/>
 									<bt:Image size="80" resid="IconAbout.80x80"/>
 								</Icon>
+
+								<Control xsi:type="Button" id="Instellingen">
+									<Label resid="Instellingen.Label"/>
+									<Supertip>
+										<Title resid="Instellingen.LabelTwo"/>
+										<Description resid="Instellingen.Description"/>
+									</Supertip>
+									<Icon>
+										<bt:Image size="16" resid="IconInstellingen.16x16"/>
+										<bt:Image size="32" resid="IconInstellingen.32x32"/>
+										<bt:Image size="80" resid="IconInstellingen.80x80"/>
+									</Icon>
+									<Action xsi:type="ShowTaskpane">
+										<TaskpaneId>OsloTaskPane</TaskpaneId>
+										<SourceLocation resid="Taskpane.Instellingen"/>
+									</Action>
+									<Enabled>false</Enabled>
+								</Control>
+							
 								<Control xsi:type="Button" id="Help">
 									<Label resid="Help.Label"/>
 									<Supertip>
@@ -136,6 +175,7 @@
 										<TaskpaneId>OsloTaskPane</TaskpaneId>
 										<SourceLocation resid="Taskpane.Help"/>
 									</Action>
+									<Enabled>false</Enabled>
 								</Control>
 								<Control xsi:type="Button" id="About">
 									<Label resid="About.Label"/>
@@ -148,12 +188,53 @@
 									<bt:Image size="32" resid="IconAbout.32x32"/>
 									<bt:Image size="80" resid="IconAbout.80x80"/>
 									</Icon>
-									<Action xsi:type="ShowTaskpane">
-										<TaskpaneId>OsloTaskPane</TaskpaneId>
-										<SourceLocation resid="Taskpane.About"/>
-									</Action>
+									<Action xsi:type="ExecuteFunction">
+    								<FunctionName>openAboutPage</FunctionName>
+  									</Action>
+									  <Enabled>false</Enabled>
 								</Control>
+								
+
 							</Group>
+
+							<Group id="OnzePartners">
+								<Label resid="OnzePartners.Label"/>
+								<Icon>
+									<bt:Image size="16" resid="IconAbout.16x16"/>
+									<bt:Image size="32" resid="IconAbout.32x32"/>
+									<bt:Image size="80" resid="IconAbout.80x80"/>
+								</Icon>
+								<Control xsi:type="Button" id="Proximus">
+									<Label resid="Proximus.Label"/>
+									<Supertip>
+										<Title resid="Proximus.LabelTwo"/>
+										<Description resid="Proximus.Description"/>
+									</Supertip>
+									<Icon>
+									<bt:Image size="16" resid="IconProximus.16x16"/>
+									<bt:Image size="32" resid="IconProximus.32x32"/>
+									<bt:Image size="80" resid="IconProximus.80x80"/>
+									</Icon>
+									<Action xsi:type="ExecuteFunction">
+    								<FunctionName>openProximusWebsite</FunctionName>
+  									</Action>
+								</Control>
+								<Control xsi:type="Button" id="Microsoft">
+									<Label resid="Microsoft.Label"/>
+									<Supertip>
+										<Title resid="Microsoft.LabelTwo"/>
+										<Description resid="Microsoft.Description"/>
+									</Supertip>
+									<Icon>
+									<bt:Image size="16" resid="IconMicrosoft.16x16"/>
+									<bt:Image size="32" resid="IconMicrosoft.32x32"/>
+									<bt:Image size="80" resid="IconMicrosoft.80x80"/>
+									</Icon>
+									<Action xsi:type="ExecuteFunction">
+    								<FunctionName>openMicrosoftWebsite</FunctionName>
+  									</Action>
+								</Control>
+								</Group>
 						</CustomTab>
 
 					</ExtensionPoint>
@@ -167,15 +248,30 @@
 				<bt:Image id="Icon.16x16" DefaultValue="{{plugin_host_url}}/assets/vo_logo_large.png"/>
 				<bt:Image id="Icon.32x32" DefaultValue="{{plugin_host_url}}/assets/vo_logo_large.png"/>
 				<bt:Image id="Icon.80x80" DefaultValue="{{plugin_host_url}}/assets/vo_logo_large.png"/>
-				<bt:Image id="IconAbout.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/about.png"/>
-				<bt:Image id="IconAbout.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/about.png"/>
-				<bt:Image id="IconAbout.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/about.png"/>
+				<bt:Image id="IconBegrippenkader.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/begrippenkader.png"/>
+				<bt:Image id="IconBegrippenkader.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/begrippenkader.png"/>
+				<bt:Image id="IconBegrippenkader.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/begrippenkader.png"/>
+				<bt:Image id="IconAbout.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/over.png"/>
+				<bt:Image id="IconAbout.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/over.png"/>
+				<bt:Image id="IconAbout.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/over.png"/>
 				<bt:Image id="IconHelp.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/help.png"/>
 				<bt:Image id="IconHelp.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/help.png"/>
 				<bt:Image id="IconHelp.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/help.png"/>
 				<bt:Image id="IconDocControle.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/documentcontrole.png"/>
 				<bt:Image id="IconDocControle.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/documentcontrole.png"/>
-				<bt:Image id="IconDocControle.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/documentcontrole.png"/>
+				<bt:Image id="IconDocControle.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/documentcontrole.png"/>
+				<bt:Image id="IconMijnWoordenboek.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/mijnwoordenboek.png"/>
+				<bt:Image id="IconMijnWoordenboek.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/mijnwoordenboek.png"/>
+				<bt:Image id="IconMijnWoordenboek.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/mijnwoordenboek.png"/>
+				<bt:Image id="IconInstellingen.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/instellingen.png"/>
+				<bt:Image id="IconInstellingen.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/instellingen.png"/>
+				<bt:Image id="IconInstellingen.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/instellingen.png"/>
+				<bt:Image id="IconProximus.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/proximus.png"/>
+				<bt:Image id="IconProximus.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/proximus.png"/>
+				<bt:Image id="IconProximus.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/proximus.png"/>
+				<bt:Image id="IconMicrosoft.16x16" DefaultValue="{{plugin_host_url}}/assets/icons/16x16/microsoft.png"/>
+				<bt:Image id="IconMicrosoft.32x32" DefaultValue="{{plugin_host_url}}/assets/icons/32x32/microsoft.png"/>
+				<bt:Image id="IconMicrosoft.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/microsoft.png"/>
 			</bt:Images>
 			<bt:Urls>
 				<bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
@@ -183,6 +279,10 @@
 				<bt:Url id="Taskpane.UrlTwo" DefaultValue="{{plugin_host_url}}/taskpanetwo.html"/>
 				<bt:Url id="Taskpane.Help" DefaultValue="{{plugin_host_url}}/taskpane-help.html"/>
 				<bt:Url id="Taskpane.About" DefaultValue="https://overheid.vlaanderen.be/oslo-wat-is-oslo"/>
+				<bt:Url id="Taskpane.MijnWoordenboek" DefaultValue="{{plugin_host_url}}/mydictionary.html"/>
+				<bt:Url id="Taskpane.Instellingen" DefaultValue="{{plugin_host_url}}/settings.html"/>
+				<bt:Url id="residDesktopFuncUrl" DefaultValue="{{plugin_host_url}}/functions.html"/>
+				
 			</bt:Urls>
 			<bt:ShortStrings>
 				<bt:String id="GetStarted.Title" DefaultValue="Aan de slag">
@@ -191,17 +291,33 @@
 				</bt:String>
 				<bt:String id="OsloRibbonGroup.Label" DefaultValue="Functies">
 				</bt:String>
-				<bt:String id="OsloRibbonGroupInfo.Label" DefaultValue="Info">
+				<bt:String id="OsloRibbonGroupInfo.Label" DefaultValue="Instellingen &amp; info">
 				</bt:String>
 				<bt:String id="OsloRibbonButton.Label" DefaultValue="OSLO Begrippenkader">
 				</bt:String>
 				<bt:String id="DocumentControle.Label" DefaultValue="Document controle">
 				</bt:String>
-				<bt:String id="Help.Label" DefaultValue="Hoe werkt OSLO?">
+				<bt:String id="Help.Label" DefaultValue="Handleiding OSLO-plugin">
 				</bt:String>
 				<bt:String id="About.Label" DefaultValue="Wat is OSLO?">
 				</bt:String>
 				<bt:String id="OsloContextMenu.Label" DefaultValue="Zoek op in OSLO">
+				</bt:String>
+				<bt:String id="MijnWoordenboek.Label" DefaultValue="Mijn woordenboek">
+				</bt:String>
+				<bt:String id="Instellingen.Label" DefaultValue="   Instellingen">
+				</bt:String>
+				<bt:String id="Instellingen.LabelTwo" DefaultValue="Instellingen">
+				</bt:String>
+				<bt:String id="OnzePartners.Label" DefaultValue="Onze partners">
+				</bt:String>
+				<bt:String id="Proximus.Label" DefaultValue="   Proximus">
+				</bt:String>
+				<bt:String id="Proximus.LabelTwo" DefaultValue="Proximus">
+				</bt:String>
+				<bt:String id="Microsoft.Label" DefaultValue="   Microsoft">
+				</bt:String>
+				<bt:String id="Microsoft.LabelTwo" DefaultValue="Microsoft">
 				</bt:String>
 			</bt:ShortStrings>
 			<bt:LongStrings>
@@ -216,6 +332,14 @@
 				<bt:String id="About.Description" DefaultValue="Wat is OSLO?">
 				</bt:String>
 				<bt:String id="OsloContextMenu.Description" DefaultValue="Zoek op in OSLO">
+				</bt:String>
+				<bt:String id="MijnWoordenboek.Description" DefaultValue="Sla OSLO-definities op in uw woordenboek.">
+				</bt:String>
+				<bt:String id="Instellingen.Description" DefaultValue="Instellingen voor de OSLO-plugin.">
+				</bt:String>
+				<bt:String id="Proximus.Description" DefaultValue="Bezoek de website van Proximus.">
+				</bt:String>
+				<bt:String id="Microsoft.Description" DefaultValue="Bezoek de website van Microsoft.">
 				</bt:String>
 			</bt:LongStrings>
 		</Resources>

@@ -20,7 +20,8 @@ module.exports = async (env, options) => {
 		entry: {
 			polyfill: "@babel/polyfill",
 			taskpane: "./src/taskpane/taskpane.ts",
-			taskpanetwo: "./src/taskpane/taskpanetwo.ts"
+			taskpanetwo: "./src/taskpane/taskpanetwo.ts",
+			taskpaneMyDictionary: "./src/taskpane/taskpaneMyDictionary.ts",
 		},
 		resolve: {
 			extensions: [".ts", ".tsx", ".html", ".js"]
@@ -58,6 +59,25 @@ module.exports = async (env, options) => {
 				chunks: ["polyfill", "taskpanetwo"]
 			}),
 
+			new HtmlWebpackPlugin({
+				filename: "mydictionary.html",
+				template: "./src/taskpane/mydictionary.html",
+				chunks: ["polyfill", "taskpaneMyDictionary"]
+			}),
+
+			new HtmlWebpackPlugin({
+				filename: "settings.html",
+				template: "./src/taskpane/settings.html",
+				chunks: ["polyfill", "taskpaneSettings"]
+			}),
+
+			new HtmlWebpackPlugin({
+				filename: "functions.html",
+				template: "./src/taskpane/functions.html",
+				chunks: ["polyfill"]
+			}),
+
+			
 			new CopyWebpackPlugin([ {
 				from: "./src/taskpane/taskpane.css",
 				to: "taskpane.css"
@@ -75,32 +95,48 @@ module.exports = async (env, options) => {
 				to: "assets/vo_logo_large.png"
 			},
 			{
-				from: "./assets/icons/80x80/about.png",
-				to: "assets/icons/80x80/about.png"
+				from: "./assets/icons/80x80/begrippenkader.png",
+				to: "assets/icons/80x80/begrippenkader.png"
 			},
 			{
-				from: "./assets/icons/32x32/about.png",
-				to: "assets/icons/32x32/about.png"
+				from: "./assets/icons/32x32/begrippenkader.png",
+				to: "assets/icons/32x32/begrippenkader.png"
 			},
 			{
-				from: "./assets/icons/16x16/about.png",
-				to: "assets/icons/16x16/about.png"
+				from: "./assets/icons/16x16/begrippenkader.png",
+				to: "assets/icons/16x16/begrippenkader.png"
+			},
+			{
+				from: "./assets/icons/80x80/over.png",
+				to: "assets/icons/80x80/over.png"
+			},
+			{
+				from: "./assets/icons/32x32/over.png",
+				to: "assets/icons/32x32/over.png"
+			},
+			{
+				from: "./assets/icons/16x16/over.png",
+				to: "assets/icons/16x16/over.png"
 			},
 			{
 				from: "./assets/icons/80x80/help.png",
-				to: "assets/icons/80x80/about.png"
+				to: "assets/icons/80x80/help.png"
 			},
 			{
 				from: "./assets/icons/32x32/help.png",
-				to: "assets/icons/32x32/about.png"
+				to: "assets/icons/32x32/help.png"
 			},
 			{
 				from: "./assets/icons/16x16/help.png",
-				to: "assets/icons/16x16/about.png"
+				to: "assets/icons/16x16/help.png"
 			},
 			{
 				from: "./assets/loading.gif",
 				to: "assets/loading.gif"
+			},
+			{
+				from: "./assets/deleteBtn.png",
+				to: "assets/deleteBtn.png"
 			},
 			{
 				from: "./assets/icons/80x80/documentcontrole.png",
@@ -113,6 +149,54 @@ module.exports = async (env, options) => {
 			{
 				from: "./assets/icons/16x16/documentcontrole.png",
 				to: "assets/icons/16x16/documentcontrole.png"
+			},
+			{
+				from: "./assets/icons/80x80/mijnwoordenboek.png",
+				to: "assets/icons/80x80/mijnwoordenboek.png"
+			},
+			{
+				from: "./assets/icons/32x32/mijnwoordenboek.png",
+				to: "assets/icons/32x32/mijnwoordenboek.png"
+			},
+			{
+				from: "./assets/icons/16x16/mijnwoordenboek.png",
+				to: "assets/icons/16x16/mijnwoordenboek.png"
+			},
+			{
+				from: "./assets/icons/80x80/instellingen.png",
+				to: "assets/icons/80x80/instellingen.png"
+			},
+			{
+				from: "./assets/icons/32x32/instellingen.png",
+				to: "assets/icons/32x32/instellingen.png"
+			},
+			{
+				from: "./assets/icons/16x16/instellingen.png",
+				to: "assets/icons/16x16/instellingen.png"
+			},
+			{
+				from: "./assets/icons/80x80/proximus.png",
+				to: "assets/icons/80x80/proximus.png"
+			},
+			{
+				from: "./assets/icons/32x32/proximus.png",
+				to: "assets/icons/32x32/proximus.png"
+			},
+			{
+				from: "./assets/icons/16x16/proximus.png",
+				to: "assets/icons/16x16/proximus.png"
+			},
+			{
+				from: "./assets/icons/80x80/microsoft.png",
+				to: "assets/icons/80x80/microsoft.png"
+			},
+			{
+				from: "./assets/icons/32x32/microsoft.png",
+				to: "assets/icons/32x32/microsoft.png"
+			},
+			{
+				from: "./assets/icons/16x16/microsoft.png",
+				to: "assets/icons/16x16/microsoft.png"
 			},
 			{
 				from: "./src/taskpane/oslo_terminology.json",
