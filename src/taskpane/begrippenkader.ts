@@ -14,7 +14,7 @@ namespace AppConfig {
   export const dutchLocale = "/nl.json";
 
   /** Set true to enable some trace messages to help debugging. */
-  export const trace = true;
+  export const trace = false;
 }
 
 /** Delimiters used when splitting text into individual words */
@@ -43,10 +43,7 @@ const wordDelimiters = [
   "|",
   "*",
   "+",
-  ""
 ];
-
-const excludedWords = ["ik","jij","hij","zij","wij","jullie","een","de","het"];
 
 /** Is true when performing a word search */
 let searching: boolean = false;
@@ -61,15 +58,6 @@ function trace(text: string) {
   }
 }
 
-let woordenMetMatch = new Array<Word.Range>();
-let myDictionary;
-let wordsToIgnore;
-
-
-let shownResult = 0;
-let documentContent = "";
-let documentContentBackup = "/";
-
 /** Logs error messages to the console. */
 function error(text: string) {
   console.error(text);
@@ -77,10 +65,8 @@ function error(text: string) {
 
 /** Office calls this onReady handler to initialize the plugin */
 Office.onReady((info) => {
-  
   // This add-in is intended to be loaded in Word (2016 Desktop or Online)
   if (info.host === Office.HostType.Word) {
-    
     // Get the display language
     //const displayLanguage = Office.context.displayLanguage;
     //localize(displayLanguage);
@@ -88,248 +74,78 @@ Office.onReady((info) => {
     // Initialize element visibility, register event handlers
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
+    document.getElementById("searchFilter").onkeyup = onSearchFilterKeyUp;
 
+    document.getElementById("findNext").onclick = onFindNextClicked;
     document.getElementById("insertFootnote").onclick = onInsertFootnoteClicked;
     document.getElementById("insertEndnote").onclick = onInsertEndnoteClicked;
-    document.getElementById("ignoreAll").onclick = ignoreAll;
-    document.getElementById("ignoreOnce").onclick = ignoreOnce;
-    document.getElementById("addToDictionary").onclick = addToDictionary;
+
+    Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, onWordSelectionChanged);
 
     searching = false;
-
-    Office.context.ui.displayDialogAsync('https://myAddinDomain/myDialog.html');
-
-    // Stel een unieke ID in voor het Word-document
-    Word.run(function (context) {
-      const OSLO_DocumentID = context.document.properties.customProperties.getItemOrNullObject("OSLO_DocumentID");
-      context.load(OSLO_DocumentID);
-      return context.sync()
-        .then(function () {
-
-          if(localStorage.getItem("OSLO_DocumentID") != OSLO_DocumentID.value)
-            localStorage.removeItem("wordsToIgnore");
-
-          if (OSLO_DocumentID.isNullObject) {
-            const uniqueID = generateDocumentId();
-            localStorage.setItem("OSLO_DocumentID", uniqueID);
-            context.document.properties.customProperties.add("OSLO_DocumentID", uniqueID);
-            return context.sync();
-          }
-          else
-          {
-            localStorage.setItem("OSLO_DocumentID", OSLO_DocumentID.value);
-          }
-
-        
-          
-        });
-    });
-
-
-    
-    // Haal te negeren woorden uit op cache of bereid lege lijst voor
-    // We gebruiken localstorage omdat SESSIONSTORAGE de woorden niet onthoud wanneer de tool gesloten wordt binnen 1 document
-
-    if(localStorage.getItem("wordsToIgnore") === null)
-    wordsToIgnore = [];
-    else
-    wordsToIgnore = JSON.parse(localStorage.getItem('wordsToIgnore'));
-
-    
-
- if(localStorage.getItem("myDictionary") === null)
-myDictionary = [];
-else
-myDictionary = JSON.parse(localStorage.getItem('myDictionary'));
-
-    
 
     // There's a bug in the office.js libraries, causing an exception in some browsers when 3rd party cookies are blocked. Notify the user why the plugin doesn't work.
     try {
       let s = window.sessionStorage;
     } catch (error) {
-      //setResultText("De extensie kon niet correct worden geladen. Gelieve in de browser instellingen alle cookies toe te laten, en daarna de pagina te herladen.");
+      setResultText(
+        "De extensie kon niet correct worden geladen. Gelieve in de browser instellingen alle cookies toe te laten, en daarna de pagina te herladen."
+      );
     }
 
-        Word.run(async function (context) {
-
-      document.getElementById("next").addEventListener("click", next);
-
-    document.getElementById("prev").addEventListener("click", prev);
-    
-      while (1) {
-        const range = context.document.body.getRange();
-        range.load();
-        await context.sync();
-        documentContent = range.text;
-
-        if (documentContent != documentContentBackup) searchInDocument();
-
-        documentContentBackup = documentContent;
-
-        await context.sync();
-      }
-
-      
-    });
-
-    
-  
-
-    
     initOsloCache(onCacheInitialized);
   }
 
   function onCacheInitialized() {
     trace("After init");
+    processSelection();
   }
+
+  document.onscroll = function () {
+    if (window.scrollY >= 114) {
+      document.getElementById("scrollWithPage").classList.add("scroll");
+      document.getElementById("clear").style.display = "block";
+      document.getElementById("clear").style.marginBottom = "63px";
+    } else {
+      document.getElementById("scrollWithPage").classList.remove("scroll");
+      document.getElementById("clear").style.display = "none";
+      document.getElementById("clear").style.marginBottom = "0px";
+    }
+  };
 });
 
-function generateDocumentId(){
-  return Date.now() + ( (Math.random()*100000).toFixed())
+/** Called when the user selects something in the Word document */
+function onWordSelectionChanged(result: Office.AsyncResult<void>) {
+  processSelection();
 }
 
-function next()
-{
-  
-  Word.run(async function (context) {
-  if (shownResult < woordenMetMatch.length - 1) {
-  
-    shownResult++;
-    loadResults();
-    //document.getElementById("current_word").textContent = woordenMetMatch[shownResult].text.toLowerCase();
+/** Keyboard handler for the search box */
+export async function onSearchFilterKeyUp(event: KeyboardEvent) {
+  return Word.run(async (context) => {
+    const searchPhrase = getSearchText();
 
-    //document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[shownResult].text.toLowerCase());
-    //document.getElementById("numResult").textContent = (shownResult + 1).toString();
-  }
-
-  changeNavButtonState();
-});
-}
-
-function prev()
-{
-  
-
-  Word.run(async function (context) {
-    
-    if (shownResult > 0) {
-      shownResult--;
-      loadResults();
-
-      //document.getElementById("numResult").textContent = (shownResult + 1).toString();
-      //document.getElementById("current_word").textContent = woordenMetMatch[shownResult].text.toLowerCase();
-      //document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[shownResult].text.toLowerCase());
-
-      document.getElementById("prev").classList.remove("button--disabled");
-      
-    }
-    
-    changeNavButtonState();
-  });
-}
-
-function ignoreAll()
-{
-  Word.run(async function (context) {
-    wordsToIgnore.push(woordenMetMatch[shownResult].text);
-
-    // werk localStorage bij
-    localStorage.setItem('wordsToIgnore', JSON.stringify(wordsToIgnore));
-
-    context.sync();
-    searchInDocument();
-  });
-}
-
-function ignoreOnce()
-{
-  Word.run(async function (context) {
-    let index = woordenMetMatch.findIndex(x => x.text == woordenMetMatch[shownResult].text);
-    woordenMetMatch.splice(index,1)
-
-    context.sync();
-    loadResults();
-  });
-}
-
-function addToDictionary()
-{
-
-  let index = 0;
-
-
-  for(const word of myDictionary)
-  {
-    if(word[0] == woordenMetMatch[shownResult].text)
-    {
-      myDictionary.splice(index, 1);
-      break;
-    }
-    index++;
-  }
-
-  //let index = myDictionary.findIndex(x => x[1].reference == "https://data.vlaanderen.be/ns/bedrijventerrein#beschikbaarheid")
-
-  // Verwijder de huidige definitie om definitie te overschrijven
-  
-  /*for(let i = 0; i < myDictionary.length; i++)
-  {
-    if(myDictionary[i][0] == woordenMetMatch[shownResult].text) woordReedsInDictionary = true; break;
-  }*/
-
-  
-    let indexChecked;
-    let i = 0;
-
-      // Find out which checkbox was checked, and which entry to use
-      if(getCheckBoxes().length > 1)
-      {
-        for (const checkbox of getCheckBoxes()) {
-          if (checkbox.checked) {
-            indexChecked = checkbox.getAttribute("data-index");
-            break;
-          }
-          i++;
-        }
-      }
-      else
-      indexChecked = 0;
-
-      myDictionary.push([woordenMetMatch[shownResult].text,osloSearchItems[indexChecked]]);
-      
-
-      // werk localStorage bij
-      localStorage.setItem('myDictionary', JSON.stringify(myDictionary));
-  
-
-      ignoreOnce();
-
-}
-
-function changeNavButtonState()
-{
-  if(shownResult == 0) document.getElementById("prev").classList.add("button--disabled");
-  else document.getElementById("prev").classList.remove("button--disabled");
-
-  if(shownResult == woordenMetMatch.length - 1) document.getElementById("next").classList.add("button--disabled");
-  else document.getElementById("next").classList.remove("button--disabled");
-      
-}
-
-export async function searchInDocument() {
-  return Word.run(async function (context) {
-    changeNavButtonState();
-    shownResult = 0;
-
-    // Wanneer het document veel woorden bevat, kan het laden even duren. Informeer de gebruiker:
-    document.getElementById("ResultBox").innerHTML = "<center><img src='assets/loading.gif' height='50px'><br><br>Even geduld, uw tekst wordt geanalyseerd...</center>";
-
-    woordenMetMatch = new Array<Word.Range>();
-
-    const range = context.document.body.getRange();
-    range.load();
+    /*if (!searchPhrase || (event.key === "Enter")) {*/
+    // Enter key pressed in the search box, or the box is empty: perform a search (empty search will show help text)
+    trace("Search [" + searchPhrase + "]");
+    search(searchPhrase);
     await context.sync();
+    /*}*/
+  });
+}
+
+/** Click handler for the "Volgende Zoeken" button. */
+export async function onFindNextClicked() {
+  return Word.run(async function (context) {
+    const selection = context.document.getSelection();
+    selection.load();
+    await context.sync();
+
+    // A Word doc doesn't only consist of characters, but also markup, styles, tables, lists, etc.
+    // Because of this, manipulation of text isn't done with strings, but with Range objects
+    // (which can be imagined as virtual selections parts of the doc)
+
+    // We start with the full document Range
+    const range = context.document.body.getRange();
 
     // The document Range consists of a number of paragraph ranges
     let paragraph = range.paragraphs.getFirstOrNullObject();
@@ -337,38 +153,64 @@ export async function searchInDocument() {
     await context.sync();
 
     let paragraphIndex = 0;
+    let found = false;
 
-    while (!paragraph.isNullObject) {
-      let words = paragraph.split(wordDelimiters, true /* trimDelimiters*/, true /* trimSpacing */);
-      words.load();
-      await context.sync().catch(function (error) {
-        // If the paragraph is empty, the split throws an error
-        words = null;
-      });
+    while (!found && !paragraph.isNullObject) {
+      trace("--- paragraphIndex = " + paragraphIndex);
 
-      let wordList = new Array<Word.Range>();
+      let skipParagraph = false;
 
-      if (words && words.items) {
-        for (let wordIndex = 0; wordIndex < words.items.length; wordIndex++) {
-          const word = words.items[wordIndex];
+      // There doesn't seem to be a way to tell which paragraph the current selection is in exactly, so we skip paragraphs until we get there.
+      // Note that even when there is no selection, the selection Range still exists and represents the current caret position.
+      const wordPosition = paragraph.getRange().compareLocationWith(selection);
+      await context.sync();
 
-          // Collect all the words in the paragraph, so we can search through them
-          // We check if the 'word' is longer then 1 characters, if not don't include the word in the wordlist
-          // We also check if the word is not in the list of excluded words
-          if(word.text.length > 1 && excludedWords.indexOf(word.text.toLowerCase()) == -1)
-          wordList.push(word);
-
-          //						trace(`[${paragraphIndex} ${wordIndex}] ${word.text}`);
-          await context.sync();
-        }
+      if (wordPosition.value === Word.LocationRelation.before) {
+        skipParagraph = true;
       }
 
-      
+      if (!skipParagraph) {
+        // Break up the paragraph into individual word Ranges
+        trace("<<<" + paragraph.text + ">>>");
 
-      // Search for dictionary words in the collected word list
-      if (wordList.length > 0) {
-        for (let k = 0; k < wordList.length; k++) {
-          if (search(wordList[k].text.toLowerCase()) && !(wordsToIgnore.includes(wordList[k].text))) woordenMetMatch.push(wordList[k]);
+        let words = paragraph.split(wordDelimiters, true /* trimDelimiters*/, true /* trimSpacing */);
+        words.load();
+        await context.sync().catch(function (error) {
+          // If the paragraph is empty, the split throws an error
+          words = null;
+        });
+
+        let wordList = new Array<Word.Range>();
+
+        if (words && words.items) {
+          for (let wordIndex = 0; wordIndex < words.items.length; wordIndex++) {
+            const word = words.items[wordIndex];
+
+            // Skip all words that come before the caret/selection position
+            const wordPosition = word.compareLocationWith(selection);
+            await context.sync();
+
+            if (wordPosition.value !== Word.LocationRelation.after) {
+              continue;
+            }
+
+            // Collect all the words in the paragraph, so we can search through them
+            wordList.push(word);
+            //						trace(`[${paragraphIndex} ${wordIndex}] ${word.text}`);
+            await context.sync();
+          }
+        }
+
+        // Search for dictionary words in the collected word list
+        if (wordList.length > 0) {
+          let result: Word.Range = findNextMatch(wordList);
+
+          if (result) {
+            // Select the found text
+            result.select();
+            found = true;
+            searching = true;
+          }
         }
       }
 
@@ -379,74 +221,9 @@ export async function searchInDocument() {
       paragraphIndex++;
     }
 
-    loadResults();
-
-    
     return context.sync();
   });
 }
-
-function loadResults()
-{
-  
-  if (woordenMetMatch.length >= 1) {
-
-    if(shownResult == woordenMetMatch.length)
-      shownResult = 0;
-
-    document.getElementById("current_word").textContent = woordenMetMatch[shownResult].text.toLowerCase();
-    document.getElementById("gevondenWoord").style.display = "";
-    document.getElementById("tools").style.display = "block";
-    document.getElementById("buttons").style.display = "";
-    document.getElementById("ResultBox").innerHTML = search(woordenMetMatch[shownResult].text.toLowerCase());
-    document.getElementById("numResult").textContent = (shownResult + 1).toString();
-    document.getElementById("totalResult").textContent = woordenMetMatch.length.toString();
-
-    
-      document.getElementById("prev").style.display = "";
-      
-
-      document.getElementById("next").style.display = "";
-      
-    }
-    else
-    {
-      document.getElementById("gevondenWoord").style.display = "none";
-    document.getElementById("buttons").style.display = "none";
-    document.getElementById("tools").style.display = "none";
-      document.getElementById("ResultBox").innerHTML = "";
-    }
-
-    if(getCheckBoxes().length > 1)
-    {
-      
-      for (const checkBox of getCheckBoxes()) {
-        if (parseInt(checkBox.getAttribute("data-index")) === 0) {
-          // At first, check the first one
-          if(document.getElementById("ResultBox").querySelector('.highlight-result') == null)
-          checkBox.checked = true;
-        }
-  
-        checkBox.onclick = onOsloItemClick(parseInt(checkBox.getAttribute("data-index")));
-  
-        
-      }
-    
-
-    }
-
-    if(document.getElementById("ResultBox").querySelector('.highlight-result') != null)
-    {
-      
-        
-      document.getElementById("ResultBox").prepend(document.getElementById("ResultBox").querySelector('.highlight-result'));
-      document.getElementById("ResultBox").querySelector('.highlight-result').querySelector("input").checked = true
-    }
-
-    changeNavButtonState();
-    
-}
-
 
 /** Helper function to compare two numbers (for sorting) */
 function compareInt(a: number, b: number): number {
@@ -559,9 +336,6 @@ function insertNote(
     return; // Nothing selected, nothing to do
   }
 
-  // The selection is a Range of markup, convert it to plain text so we can compare it
-  const mainText = selection.text;
-
   if (osloSearchItems && osloSearchItems.length > 0) {
     let entry = osloSearchItems[0];
 
@@ -582,6 +356,39 @@ function insertNote(
     const noteText = createNoteText(entry.description, entry.reference);
     const xml = useEndnote ? createEndnoteXml(noteText) : createFootnoteXml(noteText);
     selectionToInsertAfter.insertOoxml(xml, "After");
+  }
+}
+
+/** Function that changes language based on Office display language **/
+function localize(displayLanguage: string) {
+  const translationFile = identifyLocale("nl-nl"); // TODO: enable English version
+  const elements = document.querySelectorAll("[data-i18n]");
+
+  httpRequest("GET", translationFile).then((json: string) => {
+    //TODO: error handling?
+
+    const data = JSON.parse(json);
+    elements.forEach((element) => {
+      const attributeValue = (<HTMLElement>element).dataset.i18n;
+      const text = data[attributeValue];
+
+      if (attributeValue === "searchFilter") {
+        (<HTMLElement>element).setAttribute("placeholder", text);
+      } else {
+        element.innerHTML = text;
+      }
+    });
+  });
+}
+
+//TODO: add english support
+function identifyLocale(displayLanguage: string) {
+  switch (displayLanguage.toLowerCase()) {
+    case "nl-nl":
+    case "nl-be":
+      return AppConfig.dutchLocale;
+    default:
+      return AppConfig.dutchLocale;
   }
 }
 
@@ -730,24 +537,45 @@ function parseOsloResult(elasticData: any): IOsloItem[] {
   return data;
 }
 
+/** Uses the current selection to perform a search in the OSLO data set. */
+function processSelection() {
+  // Callback after reading selected text
+  let onDataSelected = function (asyncResult) {
+    let error = asyncResult.error;
+
+    if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+      error("Selection failed: " + error.name + "; " + error.message);
+    } else {
+      // The selected text is used as a search phrase
+      let searchPhrase = asyncResult.value ? asyncResult.value.trim() : "";
+
+      if (searching) {
+        // When using the "Volgende Zoeken" button, enforce exact matching
+        searchPhrase = searchPhrase ? "=" + searchPhrase : "";
+        searching = false;
+      }
+      trace("processSelection [" + searchPhrase + "]");
+      setSearchText(searchPhrase);
+      search(searchPhrase);
+    }
+  };
+
+  // Get the currently selected text from the Word document, and process it
+  Office.context.document.getSelectedDataAsync(
+    Office.CoercionType.Text,
+    { valueFormat: "unformatted", filterType: "all" },
+    onDataSelected
+  );
+}
+
 /** Searches a given phrase in the OSLO data set. */
 function search(searchPhrase: string) {
-
-  let defUitWoordenboek;
-
-
-  for(const element of myDictionary)
-  {
-    if(searchPhrase.toLowerCase() == element[0].toLowerCase())
-    {
-      defUitWoordenboek = element[1].reference;
-      break;
-    }
-  }
-
-
-
   const displayLanguage = Office.context.displayLanguage;
+  if (!searchPhrase) {
+    // The search box is empty, display the usage instructions
+    setResultText("");
+    return;
+  }
 
   // If the search phrase begins with an equals char, perform an exact match (otherwise a "contains" match)
   const exactMatch = searchPhrase.charAt(0) == "=";
@@ -772,7 +600,7 @@ function search(searchPhrase: string) {
     for (let i = 0; i < numShown; i++) {
       const item = osloMatches[i];
 
-      resultText += createSearchResultItemHtml(i, numResults, item.label, item.description, item.reference, defUitWoordenboek == item.reference);
+      resultText += createSearchResultItemHtml(i, numResults, item.label, item.description, item.reference);
     }
 
     // If we can't show all results, add a message
@@ -784,12 +612,32 @@ function search(searchPhrase: string) {
     }
   }
 
-  
   // Add the search result HTML to the DOM
   //setResultText("<hr>" + (resultText ? resultText : displayLanguage.toLowerCase() === 'en-us' ? "Nothing found" : "Niets gevonden"));
-  //setResultText("<hr>" + (resultText ? resultText : "Niets gevonden"));
+  setResultText("<hr>" + (resultText ? resultText : "Niets gevonden"));
 
-  return resultText;
+  document.getElementById("insertFootnote").classList.add("button--disabled");
+  document.getElementById("insertEndnote").classList.add("button--disabled");
+
+  if (numResults > 1) {
+    // Add click handlers to the checkboxes that were just added to the DOM
+    let i = 0;
+
+    for (const checkbox of getCheckBoxes()) {
+      checkbox.onclick = onOsloItemClick(i);
+
+      if (i === 0) {
+        // At first, check the first one
+        checkbox.checked = true;
+      }
+
+      i++;
+    }
+
+    // activeer invoegknoppen
+    document.getElementById("insertFootnote").classList.remove("button--disabled");
+    document.getElementById("insertEndnote").classList.remove("button--disabled");
+  }
 }
 
 /** Creates the HTML text for one search result item. */
@@ -798,22 +646,13 @@ function createSearchResultItemHtml(
   numResults,
   keyphrase: string,
   description: string,
-  referenceUrl: string,
-  definitieInDictionary: boolean
+  referenceUrl: string
 ): string {
   let html = "";
 
-  if(definitieInDictionary == true)
-  {
-    html += `<div class='highlight-result'><h3>Definitie uit 'Mijn woordenboek'</h3>`;
-  }
-  else
-  {
-    html += `<div>`;
-  }
-
-  if (numResults > 1) {     // If there is more than one result, add a checkbox before each item
-    html += `<input type="radio" id="cb_osloitem_${index}" data-index="${index}">&nbsp;`;
+  if (numResults > 1) {
+    // If there is more than one result, add a checkbox before each item
+    html += `<input type="checkbox" id="cb_osloitem_${index}">&nbsp;`;
   }
 
   keyphrase = escapeHtml(keyphrase);
@@ -824,8 +663,7 @@ function createSearchResultItemHtml(
 		<b>${keyphrase}</b><p>
 		${description}<p>
 		<a href="${referenceUrl}" target="_blank">${referenceUrlEscaped}</a><p>
-		</div>`;
-  
+		<hr>`;
 
   return html;
 }
@@ -833,15 +671,13 @@ function createSearchResultItemHtml(
 /** Event handler for the checkbox click. */
 export function onOsloItemClick(index: number): (this: GlobalEventHandlers, ev: MouseEvent) => any {
   return async function (event: MouseEvent) {
+    let i = 0;
 
-
+    // Check the clicked checkbox, uncheck the others (radio-button behavior)
     for (const checkbox of getCheckBoxes()) {
-      if(parseInt(checkbox.getAttribute("data-index")) == index)
-      checkbox.checked = true;
-      else
-      checkbox.checked = false;
+      checkbox.checked = i === index;
+      i++;
     }
-
   };
 }
 
@@ -857,16 +693,39 @@ function getSearchText(): string {
   return (<HTMLInputElement>document.getElementById("searchFilter")).value.trim().toLowerCase();
 }
 
+/** Sets the HTML text of the search results box. */
+function setResultText(html: string) {
+  if (html) {
+    document.getElementById("ResultBox").innerHTML = html;
+    document.getElementById("InstructionsBox").style.display = "none";
+    document.getElementById("ResultBox").style.display = null;
+  } else {
+    // If the search result is empty, show the hepl instructions instead
+    document.getElementById("InstructionsBox").style.display = "";
+    document.getElementById("ResultBox").style.display = "none";
+
+    // deactiveer invoegknoppen
+    document.getElementById("insertFootnote").classList.add("button--disabled");
+    document.getElementById("insertEndnote").classList.add("button--disabled");
+  }
+}
+
 /** Finds and returns all checkbox HTML elements, which are used to select one of the search results. */
 function getCheckBoxes(): HTMLInputElement[] {
   const checkboxes: HTMLInputElement[] = [];
 
-  const elements = document.getElementById("ResultBox").querySelectorAll('div');
+  const elements = document.getElementById("ResultBox").children;
+
+  if (!elements) {
+    return [];
+  }
 
   for (let i = 0; i < elements.length; i++) {
-    let checkBox = elements[i].querySelector("input");
-    checkboxes.push(checkBox);
+    let element = elements[i];
 
+    if (element instanceof HTMLInputElement) {
+      checkboxes.push(element);
+    }
   }
 
   return checkboxes;

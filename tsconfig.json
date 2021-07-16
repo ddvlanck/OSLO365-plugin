@@ -20,10 +20,10 @@
         "lib-amd"
     ],
     "files": [
-        "src/taskpane/taskpane.ts",
-        "src/taskpane/taskpaneSettings.ts",
-        "src/taskpane/taskpaneMyDictionary.ts",
-        "src/taskpane/taskpanetwo.ts"
+        "src/taskpane/begrippenkader.ts",
+        "src/taskpane/instellingen.ts",
+        "src/taskpane/mijnWoordenboek.ts",
+        "src/taskpane/documentControle.ts"
     ],
-    
+
 }

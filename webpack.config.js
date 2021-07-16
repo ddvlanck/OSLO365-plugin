@@ -19,9 +19,10 @@ module.exports = async (env, options) => {
 		devtool: "source-map",
 		entry: {
 			polyfill: "@babel/polyfill",
-			taskpane: "./src/taskpane/taskpane.ts",
-			taskpanetwo: "./src/taskpane/taskpanetwo.ts",
-			taskpaneMyDictionary: "./src/taskpane/taskpaneMyDictionary.ts",
+			begrippenkader: "./src/taskpane/begrippenkader.ts",
+			documentControle: "./src/taskpane/documentControle.ts",
+			mijnWoordenboek: "./src/taskpane/mijnWoordenboek.ts",
+			instellingen: "./src/taskpane/instellingen.ts",
 		},
 		resolve: {
 			extensions: [".ts", ".tsx", ".html", ".js"]
@@ -48,36 +49,40 @@ module.exports = async (env, options) => {
 			new CleanWebpackPlugin(),
 
 			new HtmlWebpackPlugin({
-				filename: "taskpane.html",
-				template: "./src/taskpane/taskpane.html",
-				chunks: ["polyfill", "taskpane"]
+				filename: "begrippenkader.html",
+				template: "./src/taskpane/begrippenkader.html",
+				chunks: ["polyfill", "begrippenkader"]
 			}),
 
 			new HtmlWebpackPlugin({
-				filename: "taskpanetwo.html",
-				template: "./src/taskpane/taskpanetwo.html",
-				chunks: ["polyfill", "taskpanetwo"]
+				filename: "documentControle.html",
+				template: "./src/taskpane/documentControle.html",
+				chunks: ["polyfill", "documentControle"]
 			}),
 
 			new HtmlWebpackPlugin({
-				filename: "mydictionary.html",
-				template: "./src/taskpane/mydictionary.html",
-				chunks: ["polyfill", "taskpaneMyDictionary"]
+				filename: "mijnWoordenboek.html",
+				template: "./src/taskpane/mijnWoordenboek.html",
+				chunks: ["polyfill", "mijnWoordenboek"]
 			}),
 
 			new HtmlWebpackPlugin({
-				filename: "settings.html",
-				template: "./src/taskpane/settings.html",
-				chunks: ["polyfill", "taskpaneSettings"]
+				filename: "instellingen.html",
+				template: "./src/taskpane/instellingen.html",
+				chunks: ["polyfill", "instellingen"]
 			}),
 
 			new HtmlWebpackPlugin({
 				filename: "functions.html",
 				template: "./src/taskpane/functions.html",
+			}),
+
+			new HtmlWebpackPlugin({
+				filename: "help.html",
+				template: "./src/taskpane/help.html",
 				chunks: ["polyfill"]
 			}),
 
-			
 			new CopyWebpackPlugin([ {
 				from: "./src/taskpane/taskpane.css",
 				to: "taskpane.css"

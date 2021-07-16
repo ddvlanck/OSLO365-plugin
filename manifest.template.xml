@@ -66,7 +66,7 @@
 									</Icon>
 									<Action xsi:type="ShowTaskpane">
 										<TaskpaneId>OsloTaskPane</TaskpaneId>
-										<SourceLocation resid="Taskpane.Url"/>
+										<SourceLocation resid="Taskpane.Begrippenkader"/>
 									</Action>
 									<Enabled>false</Enabled>
 								</Control>
@@ -94,7 +94,7 @@
 									</Icon>
 									<Action xsi:type="ShowTaskpane">
 										<TaskpaneId>OsloTaskPane</TaskpaneId>
-										<SourceLocation resid="Taskpane.Url"/>
+										<SourceLocation resid="Taskpane.Begrippenkader"/>
 									</Action>
 									<Enabled>false</Enabled>
 								</Control>
@@ -111,7 +111,7 @@
 									</Icon>
 									<Action xsi:type="ShowTaskpane">
 										<TaskpaneId>OsloTaskPane</TaskpaneId>
-										<SourceLocation resid="Taskpane.UrlTwo"/>
+										<SourceLocation resid="Taskpane.DocumentControle"/>
 									</Action>
 									<Enabled>false</Enabled>
 								</Control>
@@ -133,7 +133,7 @@
 									<Enabled>false</Enabled>
 								</Control>
 							</Group>
-							
+
 							<Group id="OsloRibbonGroupThree">
 								<Label resid="OsloRibbonGroupInfo.Label"/>
 								<Icon>
@@ -159,7 +159,7 @@
 									</Action>
 									<Enabled>false</Enabled>
 								</Control>
-							
+
 								<Control xsi:type="Button" id="Help">
 									<Label resid="Help.Label"/>
 									<Supertip>
@@ -193,7 +193,7 @@
   									</Action>
 									  <Enabled>false</Enabled>
 								</Control>
-								
+
 
 							</Group>
 
@@ -274,15 +274,15 @@
 				<bt:Image id="IconMicrosoft.80x80" DefaultValue="{{plugin_host_url}}/assets/icons/80x80/microsoft.png"/>
 			</bt:Images>
 			<bt:Urls>
-				<bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
-				<bt:Url id="Taskpane.Url" DefaultValue="{{plugin_host_url}}/taskpane.html"/>
-				<bt:Url id="Taskpane.UrlTwo" DefaultValue="{{plugin_host_url}}/taskpanetwo.html"/>
-				<bt:Url id="Taskpane.Help" DefaultValue="{{plugin_host_url}}/taskpane-help.html"/>
+				<bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://overheid.vlaanderen.be/oslo-wat-is-oslo"/>
+				<bt:Url id="Taskpane.Begrippenkader" DefaultValue="{{plugin_host_url}}/begrippenkader.html"/>
+				<bt:Url id="Taskpane.DocumentControle" DefaultValue="{{plugin_host_url}}/documentControle.html"/>
+				<bt:Url id="Taskpane.Help" DefaultValue="{{plugin_host_url}}/help.html"/>
 				<bt:Url id="Taskpane.About" DefaultValue="https://overheid.vlaanderen.be/oslo-wat-is-oslo"/>
-				<bt:Url id="Taskpane.MijnWoordenboek" DefaultValue="{{plugin_host_url}}/mydictionary.html"/>
-				<bt:Url id="Taskpane.Instellingen" DefaultValue="{{plugin_host_url}}/settings.html"/>
+				<bt:Url id="Taskpane.MijnWoordenboek" DefaultValue="{{plugin_host_url}}/mijnWoordenboek.html"/>
+				<bt:Url id="Taskpane.Instellingen" DefaultValue="{{plugin_host_url}}/instellingen.html"/>
 				<bt:Url id="residDesktopFuncUrl" DefaultValue="{{plugin_host_url}}/functions.html"/>
-				
+
 			</bt:Urls>
 			<bt:ShortStrings>
 				<bt:String id="GetStarted.Title" DefaultValue="Aan de slag">

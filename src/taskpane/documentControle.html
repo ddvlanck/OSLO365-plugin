@@ -22,6 +22,10 @@
 		<link href="taskpane.css" rel="stylesheet" type="text/css" />
 		<link href="https://dij151upo6vad.cloudfront.net/2.latest/css/vlaanderen-ui-corporate.css" rel="stylesheet" type="text/css" />
 
+		<link href="https://unpkg.com/intro.js/minified/introjs.min.css" rel="stylesheet" type="text/css">
+
+
+
 		<style>
 			#ResultBox:empty::before{
 				content: "Uw tekst bevat geen woorden met een definitie in OSLO. Probeer het later nog eens.";
@@ -29,7 +33,6 @@
     			display: block;
 			}
 		</style>
-
 
 
 	</head>
@@ -54,7 +57,7 @@
 
 			<h2 class="h2" id="gevondenWoord" style="text-align: left; display: none;">Gevonden definities voor<br><strong><span id="current_word">?</span></strong></h2>
 
-			<div id="buttons" class="buttonbox" style="display: none;">
+			<div id="buttons" class="buttonbox" style="display: none;" data-step="1" data-intro="Test">
 				<div data-i18n="findNext" role="button" id="prev" class="button-border">
 					<span class="button-label">&nbsp;&nbsp;&lt;&nbsp;Vorige&nbsp;&nbsp;</span>
 				</div>
@@ -91,6 +94,56 @@
 				</div>
 			</div>
 		</div>
+
+		<script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
+		<script>
+		introJs().setOptions({
+		  steps: [{
+		    intro: "Welkom in de vernieuwde OSLO-tool. We wijzen je even de weg."
+		  }, {
+		    element: document.querySelector('#gevondenWoord'),
+		    intro: "Hier vind je het woord dat momenteel geslecteerd is."
+		  },
+			{
+				element: document.querySelector('#buttons'),
+				intro: "Hier kan je navigeren door alle woorden."
+			},
+			{
+				element: document.querySelector('#ResultBox'),
+				intro: "Hier vind je alle mogelijke definities. Selecteer er één."
+			},
+			{
+				element: document.querySelector('#tools'),
+				intro: "Dan kijken we nu even naar de mogelijke acties."
+			},
+			{
+				element: document.querySelector('#insertFootnote'),
+				intro: "Voeg een voetnoot in voor het huidige woord met de geselecteerde definitie."
+			},
+			{
+				element: document.querySelector('#insertEndnote'),
+				intro: "Voeg een eindnoot in voor het huidige woord met de geselecteerde definitie."
+			},
+			{
+				element: document.querySelector('#ignoreOnce'),
+				intro: "Wil je aan deze instantie van dit woord nu geen definitie toekennen, klik dan hier."
+			},
+			{
+				element: document.querySelector('#ignoreAll'),
+				intro: "Wil je aan alle instanties van dit woord in dit document nu geen definitie toekennen, klik dan hier."
+			},
+			{
+				element: document.querySelector('#addToDictionary'),
+				intro: "Wil je de geselecteerde definitie voor dit woord opslaan in 'Mijn Woordenboek', klik dan hier. De definitie zal voortaan bovenaan getoond worden."
+			}
+
+
+
+
+		]
+		}).start();
+		</script>
+
 
 		</body>
 
