@@ -18,5 +18,12 @@
         "dist",
         "lib",
         "lib-amd"
-    ]
+    ],
+    "files": [
+        "src/taskpane/taskpane.ts",
+        "src/taskpane/taskpaneSettings.ts",
+        "src/taskpane/taskpaneMyDictionary.ts",
+        "src/taskpane/taskpanetwo.ts"
+    ],
+    
 }
