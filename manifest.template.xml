@@ -275,12 +275,12 @@
 			</bt:Images>
 			<bt:Urls>
 				<bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://overheid.vlaanderen.be/oslo-wat-is-oslo"/>
-				<bt:Url id="Taskpane.Begrippenkader" DefaultValue="{{plugin_host_url}}/begrippenkader.html"/>
-				<bt:Url id="Taskpane.DocumentControle" DefaultValue="{{plugin_host_url}}/documentControle.html"/>
+				<bt:Url id="Taskpane.Begrippenkader" DefaultValue="{{plugin_host_url}}/search.html"/>
+				<bt:Url id="Taskpane.DocumentControle" DefaultValue="{{plugin_host_url}}/documentCheck.html"/>
 				<bt:Url id="Taskpane.Help" DefaultValue="{{plugin_host_url}}/help.html"/>
 				<bt:Url id="Taskpane.About" DefaultValue="https://overheid.vlaanderen.be/oslo-wat-is-oslo"/>
-				<bt:Url id="Taskpane.MijnWoordenboek" DefaultValue="{{plugin_host_url}}/mijnWoordenboek.html"/>
-				<bt:Url id="Taskpane.Instellingen" DefaultValue="{{plugin_host_url}}/instellingen.html"/>
+				<bt:Url id="Taskpane.MijnWoordenboek" DefaultValue="{{plugin_host_url}}/dictionary.html"/>
+				<bt:Url id="Taskpane.Instellingen" DefaultValue="{{plugin_host_url}}/settings.html"/>
 				<bt:Url id="residDesktopFuncUrl" DefaultValue="{{plugin_host_url}}/functions.html"/>
 
 			</bt:Urls>
