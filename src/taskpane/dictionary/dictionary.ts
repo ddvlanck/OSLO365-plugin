@@ -51,7 +51,7 @@ function createSearchResultItemHtml(description: string, referenceUrl: string): 
 }
 
 function escapeHtml(text: string) {
-  return text ? text.replace(/[^0-9A-Za-z ]/g, (char) => "&#" + char.charCodeAt(0) + ";") : "";
+  return text ? text.replace(/[^0-9A-Za-z ]/g, char => "&#" + char.charCodeAt(0) + ";") : "";
 }
 
 function getDeleteButtons(): HTMLImageElement[] {
@@ -78,7 +78,7 @@ function loadDictionary() {
   document.getElementById("ResultBox").innerHTML = "";
 
   // sort dictionary
-  myDictionary.sort(function (a, b) {
+  myDictionary.sort(function(a, b) {
     var textA = a[0].toUpperCase();
     var textB = b[0].toUpperCase();
     return textA < textB ? -1 : textA > textB ? 1 : 0;
@@ -102,7 +102,7 @@ function loadDictionary() {
   }
 
   for (const deleteBtn of getDeleteButtons()) {
-    deleteBtn.onclick = function () {
+    deleteBtn.onclick = function() {
       //let wordsToIgnore = JSON.parse(localStorage.getItem('wordsToIgnore'));
       //let index = wordsToIgnore.indexOf(myDictionary[deleteBtn.getAttribute("data-id")][0]);
       myDictionary.splice(deleteBtn.getAttribute("data-id"), 1);
@@ -118,7 +118,7 @@ function loadDictionary() {
 }
 
 /** Office calls this onReady handler to initialize the plugin */
-Office.onReady((info) => {
+Office.onReady(info => {
   // This add-in is intended to be loaded in Word (2016 Desktop or Online)
   if (info.host === Office.HostType.Word) {
     // Initialize element visibility, register event handlers

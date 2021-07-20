@@ -43,7 +43,7 @@ const wordDelimiters = [
   "|",
   "*",
   "+",
-  "",
+  ""
 ];
 
 /** Is true when performing a word search */
@@ -74,7 +74,7 @@ function error(text: string) {
 }
 
 /** Office calls this onReady handler to initialize the plugin */
-Office.onReady((info) => {
+Office.onReady(info => {
   // This add-in is intended to be loaded in Word (2016 Desktop or Online)
   if (info.host === Office.HostType.Word) {
     // Get the display language
@@ -92,14 +92,12 @@ Office.onReady((info) => {
     document.getElementById("addToDictionary").onclick = addToDictionary;
 
     searching = false;
-
-    Office.context.ui.displayDialogAsync("https://myAddinDomain/myDialog.html");
-
+    
     // Stel een unieke ID in voor het Word-document
-    Word.run(function (context) {
+    Word.run(function(context) {
       const OSLO_DocumentID = context.document.properties.customProperties.getItemOrNullObject("OSLO_DocumentID");
       context.load(OSLO_DocumentID);
-      return context.sync().then(function () {
+      return context.sync().then(function() {
         if (localStorage.getItem("OSLO_DocumentID") != OSLO_DocumentID.value) localStorage.removeItem("wordsToIgnore");
 
         if (OSLO_DocumentID.isNullObject) {
@@ -133,7 +131,7 @@ Office.onReady((info) => {
       //setResultText("De extensie kon niet correct worden geladen. Gelieve in de browser instellingen alle cookies toe te laten, en daarna de pagina te herladen.");
     }
 
-    Word.run(async function (context) {
+    Word.run(async function(context) {
       document.getElementById("next").addEventListener("click", next);
 
       document.getElementById("prev").addEventListener("click", prev);
@@ -165,7 +163,7 @@ function generateDocumentId() {
 }
 
 function next() {
-  Word.run(async function (context) {
+  Word.run(async function(context) {
     if (shownResult < woordenMetMatch.length - 1) {
       shownResult++;
       loadResults();
@@ -180,7 +178,7 @@ function next() {
 }
 
 function prev() {
-  Word.run(async function (context) {
+  Word.run(async function(context) {
     if (shownResult > 0) {
       shownResult--;
       loadResults();
@@ -197,7 +195,7 @@ function prev() {
 }
 
 function ignoreAll() {
-  Word.run(async function (context) {
+  Word.run(async function(context) {
     wordsToIgnore.push(woordenMetMatch[shownResult].text);
 
     // werk localStorage bij
@@ -209,8 +207,8 @@ function ignoreAll() {
 }
 
 function ignoreOnce() {
-  Word.run(async function (context) {
-    let index = woordenMetMatch.findIndex((x) => x.text == woordenMetMatch[shownResult].text);
+  Word.run(async function(context) {
+    let index = woordenMetMatch.findIndex(x => x.text == woordenMetMatch[shownResult].text);
     woordenMetMatch.splice(index, 1);
 
     context.sync();
@@ -269,7 +267,7 @@ function changeNavButtonState() {
 }
 
 export async function searchInDocument() {
-  return Word.run(async function (context) {
+  return Word.run(async function(context) {
     changeNavButtonState();
     shownResult = 0;
 
@@ -294,7 +292,7 @@ export async function searchInDocument() {
     while (!paragraph.isNullObject) {
       let words = paragraph.split(wordDelimiters, true /* trimDelimiters*/, true /* trimSpacing */);
       words.load();
-      await context.sync().catch(function (error) {
+      await context.sync().catch(function(error) {
         // If the paragraph is empty, the split throws an error
         words = null;
       });
@@ -373,7 +371,10 @@ function loadResults() {
     document
       .getElementById("ResultBox")
       .prepend(document.getElementById("ResultBox").querySelector(".highlight-result"));
-    document.getElementById("ResultBox").querySelector(".highlight-result").querySelector("input").checked = true;
+    document
+      .getElementById("ResultBox")
+      .querySelector(".highlight-result")
+      .querySelector("input").checked = true;
   }
 
   changeNavButtonState();
@@ -386,7 +387,7 @@ function compareInt(a: number, b: number): number {
 
 /** Click handler for button to insert a footnote in the Word doc */
 export async function onInsertFootnoteClicked() {
-  return Word.run(async function (context) {
+  return Word.run(async function(context) {
     const selection = context.document.getSelection();
     const rangeCollection = context.document.getSelection().getTextRanges([" "], true);
     rangeCollection.load();
@@ -405,7 +406,7 @@ export async function onInsertFootnoteClicked() {
 
 /** Click handler for button to insert a endnote in the Word doc */
 export async function onInsertEndnoteClicked() {
-  return Word.run(async function (context) {
+  return Word.run(async function(context) {
     const selection = context.document.getSelection();
     const rangeCollection = context.document.getSelection().getTextRanges([" "], true);
     rangeCollection.load();
@@ -527,7 +528,7 @@ function initOsloCache(afterCacheInitialized: () => void): void {
       trace("OSLO data cache initialized, " + osloLookupEntries.length + " items, " + osloLookupMap.size + " buckets");
       afterCacheInitialized();
     })
-    .catch((error) => {
+    .catch(error => {
       trace("Error: " + error);
     });
 }
@@ -570,7 +571,7 @@ async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
     const request = new XMLHttpRequest();
 
     // Callback after request.send()
-    request.onload = function (event) {
+    request.onload = function(event) {
       if (request.status === 200) {
         // HTTP request successful, resolve the promise with the response body
         resolve(request.response);
@@ -599,7 +600,7 @@ function parseOsloResult(elasticData: any): IOsloItem[] {
         label: item.prefLabel ? item.prefLabel : "",
         keyphrase: item.prefLabel ? item.prefLabel.toLowerCase() : "",
         description: item.definition,
-        reference: item.id,
+        reference: item.id
       };
       // And store the data objects in a list
       if (osloEntry.keyphrase && osloEntry.description) {
@@ -709,7 +710,7 @@ function createSearchResultItemHtml(
 
 /** Event handler for the checkbox click. */
 export function onOsloItemClick(index: number): (this: GlobalEventHandlers, ev: MouseEvent) => any {
-  return async function (event: MouseEvent) {
+  return async function(event: MouseEvent) {
     for (const checkbox of getCheckBoxes()) {
       if (parseInt(checkbox.getAttribute("data-index")) == index) checkbox.checked = true;
       else checkbox.checked = false;
@@ -745,7 +746,7 @@ function getCheckBoxes(): HTMLInputElement[] {
 
 /** Escape non alpha-numeric chars for safe inclusion in HTML */
 function escapeHtml(text: string) {
-  return text ? text.replace(/[^0-9A-Za-z ]/g, (char) => "&#" + char.charCodeAt(0) + ";") : "";
+  return text ? text.replace(/[^0-9A-Za-z ]/g, char => "&#" + char.charCodeAt(0) + ";") : "";
 }
 
 /** Create the OOXML text for the footnote/endnote text. */

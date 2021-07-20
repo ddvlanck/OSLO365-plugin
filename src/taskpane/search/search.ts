@@ -42,7 +42,7 @@ const wordDelimiters = [
   "}",
   "|",
   "*",
-  "+",
+  "+"
 ];
 
 /** Is true when performing a word search */
@@ -64,7 +64,7 @@ function error(text: string) {
 }
 
 /** Office calls this onReady handler to initialize the plugin */
-Office.onReady((info) => {
+Office.onReady(info => {
   // This add-in is intended to be loaded in Word (2016 Desktop or Online)
   if (info.host === Office.HostType.Word) {
     // Get the display language
@@ -101,7 +101,7 @@ Office.onReady((info) => {
     processSelection();
   }
 
-  document.onscroll = function () {
+  document.onscroll = function() {
     if (window.scrollY >= 114) {
       document.getElementById("scrollWithPage").classList.add("scroll");
       document.getElementById("clear").style.display = "block";
@@ -121,7 +121,7 @@ function onWordSelectionChanged(result: Office.AsyncResult<void>) {
 
 /** Keyboard handler for the search box */
 export async function onSearchFilterKeyUp(event: KeyboardEvent) {
-  return Word.run(async (context) => {
+  return Word.run(async context => {
     const searchPhrase = getSearchText();
 
     /*if (!searchPhrase || (event.key === "Enter")) {*/
@@ -135,7 +135,7 @@ export async function onSearchFilterKeyUp(event: KeyboardEvent) {
 
 /** Click handler for the "Volgende Zoeken" button. */
 export async function onFindNextClicked() {
-  return Word.run(async function (context) {
+  return Word.run(async function(context) {
     const selection = context.document.getSelection();
     selection.load();
     await context.sync();
@@ -175,7 +175,7 @@ export async function onFindNextClicked() {
 
         let words = paragraph.split(wordDelimiters, true /* trimDelimiters*/, true /* trimSpacing */);
         words.load();
-        await context.sync().catch(function (error) {
+        await context.sync().catch(function(error) {
           // If the paragraph is empty, the split throws an error
           words = null;
         });
@@ -283,7 +283,7 @@ function findNextMatch(wordList: Array<Word.Range>): Word.Range {
 
 /** Click handler for button to insert a footnote in the Word doc */
 export async function onInsertFootnoteClicked() {
-  return Word.run(async function (context) {
+  return Word.run(async function(context) {
     const selection = context.document.getSelection();
     const rangeCollection = context.document.getSelection().getTextRanges([" "], true);
     rangeCollection.load();
@@ -302,7 +302,7 @@ export async function onInsertFootnoteClicked() {
 
 /** Click handler for button to insert a endnote in the Word doc */
 export async function onInsertEndnoteClicked() {
-  return Word.run(async function (context) {
+  return Word.run(async function(context) {
     const selection = context.document.getSelection();
     const rangeCollection = context.document.getSelection().getTextRanges([" "], true);
     rangeCollection.load();
@@ -368,7 +368,7 @@ function localize(displayLanguage: string) {
     //TODO: error handling?
 
     const data = JSON.parse(json);
-    elements.forEach((element) => {
+    elements.forEach(element => {
       const attributeValue = (<HTMLElement>element).dataset.i18n;
       const text = data[attributeValue];
 
@@ -454,7 +454,7 @@ function initOsloCache(afterCacheInitialized: () => void): void {
       trace("OSLO data cache initialized, " + osloLookupEntries.length + " items, " + osloLookupMap.size + " buckets");
       afterCacheInitialized();
     })
-    .catch((error) => {
+    .catch(error => {
       trace("Error: " + error);
     });
 }
@@ -497,7 +497,7 @@ async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
     const request = new XMLHttpRequest();
 
     // Callback after request.send()
-    request.onload = function (event) {
+    request.onload = function(event) {
       if (request.status === 200) {
         // HTTP request successful, resolve the promise with the response body
         resolve(request.response);
@@ -526,7 +526,7 @@ function parseOsloResult(elasticData: any): IOsloItem[] {
         label: item.prefLabel ? item.prefLabel : "",
         keyphrase: item.prefLabel ? item.prefLabel.toLowerCase() : "",
         description: item.definition,
-        reference: item.id,
+        reference: item.id
       };
       // And store the data objects in a list
       if (osloEntry.keyphrase && osloEntry.description) {
@@ -540,7 +540,7 @@ function parseOsloResult(elasticData: any): IOsloItem[] {
 /** Uses the current selection to perform a search in the OSLO data set. */
 function processSelection() {
   // Callback after reading selected text
-  let onDataSelected = function (asyncResult) {
+  let onDataSelected = function(asyncResult) {
     let error = asyncResult.error;
 
     if (asyncResult.status === Office.AsyncResultStatus.Failed) {
@@ -670,7 +670,7 @@ function createSearchResultItemHtml(
 
 /** Event handler for the checkbox click. */
 export function onOsloItemClick(index: number): (this: GlobalEventHandlers, ev: MouseEvent) => any {
-  return async function (event: MouseEvent) {
+  return async function(event: MouseEvent) {
     let i = 0;
 
     // Check the clicked checkbox, uncheck the others (radio-button behavior)
@@ -733,7 +733,7 @@ function getCheckBoxes(): HTMLInputElement[] {
 
 /** Escape non alpha-numeric chars for safe inclusion in HTML */
 function escapeHtml(text: string) {
-  return text ? text.replace(/[^0-9A-Za-z ]/g, (char) => "&#" + char.charCodeAt(0) + ";") : "";
+  return text ? text.replace(/[^0-9A-Za-z ]/g, char => "&#" + char.charCodeAt(0) + ";") : "";
 }
 
 /** Create the OOXML text for the footnote/endnote text. */

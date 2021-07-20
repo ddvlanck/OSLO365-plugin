@@ -61,7 +61,7 @@ function loadExcludedWords() {
   document.getElementById("ExcludedWords").innerHTML = "";
 
   // sort dictionary
-  excludedWords.sort(function (a, b) {
+  excludedWords.sort(function(a, b) {
     var textA = a[0].toUpperCase();
     var textB = b[0].toUpperCase();
     return textA < textB ? -1 : textA > textB ? 1 : 0;
@@ -77,7 +77,7 @@ function loadExcludedWords() {
   }
 
   for (const deleteBtn of getDeleteButtons()) {
-    deleteBtn.onclick = function () {
+    deleteBtn.onclick = function() {
       excludedWords.splice(deleteBtn.getAttribute("data-id"), 1);
 
       localStorage.setItem("excludedWords", JSON.stringify(excludedWords));
@@ -87,7 +87,7 @@ function loadExcludedWords() {
 }
 
 /** Office calls this onReady handler to initialize the plugin */
-Office.onReady((info) => {
+Office.onReady(info => {
   // This add-in is intended to be loaded in Word (2016 Desktop or Online)
   if (info.host === Office.HostType.Word) {
     // Initialize element visibility, register event handlers
