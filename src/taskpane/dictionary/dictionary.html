@@ -4,59 +4,62 @@
 	Copyright (c) 2020 Vlaamse Overheid. Licensed under the MIT License.
 	See LICENSE in the project root for license information.
 -->
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>VO OSLO Add-in</title>
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<!-- Office JavaScript API -->
-		<script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
-		<script type="text/javascript" src="https://dij151upo6vad.cloudfront.net/2.latest/js/vlaanderen-ui.js"></script>
-		
-		<!-- For more information on Office UI Fabric, visit https://developer.microsoft.com/fabric. -->
-		<!--<link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"/>-->
+	<title>Mijn woordenboek</title>
 
-		<!-- Styles for this pane -->
-		<link href="taskpane.css" rel="stylesheet" type="text/css" />
-		<link href="https://dij151upo6vad.cloudfront.net/2.latest/css/vlaanderen-ui-corporate.css" rel="stylesheet" type="text/css" />
-		
+	<!-- Office JavaScript API -->
+	<script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+	<script type="text/javascript" src="https://dij151upo6vad.cloudfront.net/2.latest/js/vlaanderen-ui.js"></script>
 
-		<style>
-			#ResultBox:empty::before{
-				content: "Uw woordenboek is momenteel leeg.";
-			}
-		</style>
+	<!-- For more information on Office UI Fabric, visit https://developer.microsoft.com/fabric. -->
+	<!--<link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"/>-->
+
+	<!-- Styles for this pane -->
+	<link href="taskpane.css" rel="stylesheet" type="text/css" />
+	<link href="https://dij151upo6vad.cloudfront.net/2.latest/css/vlaanderen-ui-corporate.css" rel="stylesheet"
+		type="text/css" />
 
 
+	<style>
+		#ResultBox:empty::before {
+			content: "Uw woordenboek is momenteel leeg.";
+		}
+	</style>
 
-	</head>
-
-	<body class="ms-font-m ms-welcome ms-Fabric">
 
 
-		<header class="header ms-bgColor-neutralLighter">
+</head>
 
-			<!-- Top banner -->
-			<a class="logo" href="https://overheid.vlaanderen.be/oslo-wat-is-oslo" target="_blank"></a>
-			<h2 class="h2">OSLO</h1>
-		</header>
+<body class="ms-font-m ms-welcome ms-Fabric">
 
-		<!-- The following section is shown when this page is loaded in a browser outside of Word/O365. -->
-		<section id="sideload-msg" class="main">
-			<h2 data-i18n="loadingError" class="ms-font-xl" id="loadingError">Deze extensie werkt enkel vanuit Word 2016</h2>
-		</section>
 
-		<!-- Inside Word, the following section will show instead. -->
-		<main id="app-body" class="main" style="display: none;">
+	<header class="header ms-bgColor-neutralLighter">
 
-			<h2 class="h2" id="gevondenWoord" style="text-align: left;">Mijn woordenboek</h2>
+		<!-- Top banner -->
+		<a class="logo" href="https://overheid.vlaanderen.be/oslo-wat-is-oslo" target="_blank"></a>
+		<h2 class="h2">OSLO</h1>
+	</header>
 
-				
-			<div name="ResultBox" id="ResultBox" style="min-width: 300; width: 100%; height: calc(100vh - 175px); overflow-y: scroll;"></div>
-		</main>
+	<!-- The following section is shown when this page is loaded in a browser outside of Word/O365. -->
+	<section id="sideload-msg" class="main">
+		<h2 data-i18n="loadingError" class="ms-font-xl" id="loadingError">Deze extensie werkt enkel vanuit Word 2016</h2>
+	</section>
 
-		</body>
+	<!-- Inside Word, the following section will show instead. -->
+	<main id="app-body" class="main" style="display: none;">
+
+		<h2 class="h2" id="gevondenWoord" style="text-align: left;">Mijn woordenboek</h2>
+
+
+		<div name="ResultBox" id="ResultBox"
+			style="min-width: 300; width: 100%; height: calc(100vh - 175px); overflow-y: scroll;"></div>
+	</main>
+
+</body>
 
 </html>
