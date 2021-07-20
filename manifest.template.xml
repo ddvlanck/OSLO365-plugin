@@ -47,7 +47,7 @@
 					<ExtensionPoint xsi:type="PrimaryCommandSurface">
 						<OfficeTab id="TabHome">
 							<Group id="OsloRibbonGroup">
-								<Label resid="OsloRibbonGroup.Label"/>
+								<Label resid="Organization.Name"/>
 								<Icon>
 									<bt:Image size="16" resid="Icon.16x16"/>
 									<bt:Image size="32" resid="Icon.32x32"/>
@@ -82,7 +82,7 @@
 									<bt:Image size="80" resid="Icon.80x80"/>
 								</Icon>
 								<Control xsi:type="Button" id="OsloRibbonButtonTwo">
-									<Label resid="OsloRibbonButton.Label"/>
+									<Label resid="OsloRibbonButton.Label.Short"/>
 									<Supertip>
 										<Title resid="OsloRibbonButton.Label"/>
 										<Description resid="OsloRibbonButton.Description"/>
@@ -287,17 +287,21 @@
 			<bt:ShortStrings>
 				<bt:String id="GetStarted.Title" DefaultValue="Aan de slag">
 				</bt:String>
-				<bt:String id="OsloTab.Label" DefaultValue="OSLO">
+				<bt:String id="Organization.Name" DefaultValue="OSLO">
+				</bt:String>
+				<bt:String id="OsloTab.Label" DefaultValue="OSLO Begrippenkader">
 				</bt:String>
 				<bt:String id="OsloRibbonGroup.Label" DefaultValue="Functies">
 				</bt:String>
 				<bt:String id="OsloRibbonGroupInfo.Label" DefaultValue="Instellingen &amp; info">
 				</bt:String>
-				<bt:String id="OsloRibbonButton.Label" DefaultValue="OSLO Begrippenkader">
+				<bt:String id="OsloRibbonButton.Label" DefaultValue="Zoeken in OSLO">
+				</bt:String>
+				<bt:String id="OsloRibbonButton.Label.Short" DefaultValue="    Zoeken">
 				</bt:String>
 				<bt:String id="DocumentControle.Label" DefaultValue="Document controle">
 				</bt:String>
-				<bt:String id="Help.Label" DefaultValue="Handleiding OSLO-plugin">
+				<bt:String id="Help.Label" DefaultValue="    Help">
 				</bt:String>
 				<bt:String id="About.Label" DefaultValue="Wat is OSLO?">
 				</bt:String>
@@ -323,7 +327,7 @@
 			<bt:LongStrings>
 				<bt:String id="GetStarted.Description" DefaultValue="De extensie is geladen. Ga naar de Start/Home tab en klik op de 'OSLO Begrippenkader' knop om begrippen te zoeken.">
 				</bt:String>
-				<bt:String id="OsloRibbonButton.Description" DefaultValue="Klik om het OSLO zijpaneel te openen">
+				<bt:String id="OsloRibbonButton.Description" DefaultValue="Zoek definities van woorden op in de OSLO Knowledge Graph">
 				</bt:String>
 				<bt:String id="DocumentControle.Description" DefaultValue="Controleer uw document op overeenkomsten met een van de OSLO-definities.">
 				</bt:String>
