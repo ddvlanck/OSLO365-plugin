@@ -2,7 +2,6 @@
  * Copyright (c) 2020 Vlaamse Overheid. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
-
 import get = Reflect.get;
 
 /** The config for this code */
