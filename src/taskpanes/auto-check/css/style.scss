@@ -1,0 +1,30 @@
+$vl-pswp-assets-path: "~@govflanders/vl-ui-core/dist/img/lightbox/";
+$vl-font-location: "~@govflanders/vl-ui-core/dist/font/flanders/";
+$vl-icon-font-location: "~@govflanders/vl-ui-core/dist/font/iconfont/";
+
+@import "~@govflanders/vl-ui-core/src/scss/core";
+@import "~@govflanders/vl-ui-button/src/scss/button";
+@import "~@govflanders/vl-ui-action-group/src/scss/action-group";
+@import "~@govflanders/vl-ui-introduction/src/scss/introduction";
+@import "~@govflanders/vl-ui-titles/src/scss/titles";
+@import "~@govflanders/vl-ui-util/src/scss/util";
+@import "~@govflanders/vl-ui-content-footer/src/scss/content-footer";
+
+.header {
+  padding: 10px 0px 10px 0px;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+
+.header a.logo {
+  display: inline-block;
+  background-image: url(../../../../assets/vo_oslo_logo_large.png);
+  height: 90px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  margin-left: 0;
+  margin-right: 0;
+}
