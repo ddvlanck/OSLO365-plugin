@@ -1,9 +1,0 @@
-{
-  "instructions": "<p><hr><b>Add meaning to your typing</b><br><br>While writing your text, use this add-in to give meaning to the words you select. The meaning of the words was agreed upon in the OSLO knowledge vocabulary.<p><hr><b>Instructions:</b><br> In your document, select the text you want to look up in the OSLO Knowledge Vocabulary.<p>Alternatively, you can also enter text in the search box above (start with = for an exact match, type enter to search). <p>Click on \"Find next\" to find terms from the OSLO Knowledge Vocabulary in your document.Each click search en selects the next term.<p>Once a search term has been found and selected, you can click on \"Insert footnote\" or \"Insert endnote\",to add the information from the knowledge vocabulary as footnote or endnote respectively in your document.<p>If there are multiple search results, you must first tick the box of the search term you want to add as a footnote or endnote.<p>",
-  "findNext" : "<span class=\"button-label\">Find<br>Next</span>",
-  "footnote" : "<span class=\"button-label\">Insert<br>Footnote</span>",
-  "endnote" : "<span class=\"button-label\">Insert<br>Endnote</span>",
-  "searchFilter" : "Ask OSLO...",
-  "loadingError" : "This add-in only works for Word 2016 and above.",
-  "footer": "<div>Developed by</div><a class=\"proximus-logo\" href=\"https://www.proximus.com/nl/\" target=\"_blank\"></a>"
-}
