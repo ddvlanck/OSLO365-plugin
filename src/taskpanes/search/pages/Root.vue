@@ -27,8 +27,9 @@
       </vl-grid>
     </vl-layout>
     <content-footer v-if="result.length > 0" />
-    {{title}}
-    {{definitions}}
+    {{title}} <br>
+    {{definitions}} <br>
+    {{url}} <br>
   </div>
 </template>
 
