@@ -20,8 +20,6 @@ Vue.use(VlUiVueComponents, {
 });
 Vue.use(Vuex);
 
-console.log(store.state.test);
-
 Office.onReady((info) => {
   if (info.host === Office.HostType.Word) {
     var app = new Vue({
