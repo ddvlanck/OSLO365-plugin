@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    <!-- For more information on Fluent UI, visit https://developer.microsoft.com/fluentui#/. -->
+    <link rel="stylesheet"
+          href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css" />
+    <script>
+        // The initialize function must be defined each time a new page is loaded
+        (function () {
+            Office.initialize = function (reason) {
+
+            };
+        })();
+        function opensettings (clickEvent) {
+            Office.context.ui.displayDialogAsync(window.location.origin + "/settings.html", {height:50, width:50, displayInIframe:true});
+            clickEvent.completed();
+        }
+        function openAboutPage (clickEvent) {
+            Office.context.ui.displayDialogAsync(window.location.origin + "/about.html", {height:50, width:50, displayInIframe:true});
+            clickEvent.completed();
+        }
+
+    </script>
+</head>
+
+<body>
+
+</body>
+</html>
