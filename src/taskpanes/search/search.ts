@@ -5,6 +5,7 @@ const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { trace } from "../../utils/Utils";
 import { OsloCache } from "../../oslo/OsloCache";
 import EventBus from "../../utils/EventBus";
+import {store} from "../../store/OsloStore";
 
 let searching = false;
 
@@ -19,9 +20,6 @@ Vue.use(VlUiVueComponents, {
 });
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
-  state: {test: "bliepblop"}
-});
 console.log(store.state.test);
 
 Office.onReady((info) => {
