@@ -1,4 +1,5 @@
 import Vue from "vue";
+import Vuex from "vuex";
 import root from "./pages/Root.vue";
 const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { trace } from "../../utils/Utils";
@@ -16,6 +17,12 @@ const validatorConfig = {
 Vue.use(VlUiVueComponents, {
   validation: validatorConfig,
 });
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+  state: {test: "bliepblop"}
+});
+console.log(store.state.test);
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Word) {

@@ -12,7 +12,6 @@
         // The initialize function must be defined each time a new page is loaded
         (function () {
             Office.initialize = function (reason) {
-
             };
         })();
         function opensettings (clickEvent) {
@@ -20,7 +19,15 @@
             clickEvent.completed();
         }
         function openAboutPage (clickEvent) {
-            Office.context.ui.displayDialogAsync(window.location.origin + "/about.html", {height:50, width:50, displayInIframe:true});
+            window.open('https://overheid.vlaanderen.be/oslo-wat-is-oslo',"_blank");
+            clickEvent.completed();
+        }
+        function openProximusWebsite (clickEvent) {
+            window.open('https://proximus.com',"_blank");
+            clickEvent.completed();
+        }
+        function openMicrosoftWebsite (clickEvent) {
+            window.open('https://microsoft.com',"_blank");
             clickEvent.completed();
         }
 
