@@ -27,7 +27,8 @@
       </vl-grid>
     </vl-layout>
     <content-footer v-if="result.length > 0" />
-    {{test}}
+    {{title}}
+    {{definitions}}
   </div>
 </template>
 
@@ -48,7 +49,9 @@ export default Vue.extend({
       input: "",
       result: [] as IOsloItem[],
       show: false,
-      test: store.state.test
+      title: store.state.title,
+      definitions: store.state.definition,
+      url: store.state.url
     };
   },
   methods: {

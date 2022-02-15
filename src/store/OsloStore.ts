@@ -5,12 +5,53 @@ import {AppConfig} from "../utils/AppConfig";
 
 
 Vue.use(Vuex);
-getdata();
+getData();
 
+//Vuex store
 export const store = new Vuex.Store({
-    state: {test: "bliepblop"}
+    state: {
+        title: "bliepblop",
+        definition: "blopblop",
+        url: "www.blopblop.com"
+    },
+    mutations: {
+        updateTitle (state, title) {
+            state.title = title
+        },
+        updateDefinition (state, definition) {
+            state.definition = definition
+        },
+        updateUrl (state, url) {
+            state.url = url
+        }
+    }
 });
 
+//fetches all the data from the Oslo database
+function getData(){
+    httpRequest("GET", AppConfig.dataFileUrl).then((json: string) => {
+        if (!json) {
+            error('Oslo data empty');
+        }
+        //clean on the objects we need
+        const data = JSON.parse(json);
+        let title = data["hits"]["hits"][5]["_source"]["prefLabel"];  //5 to grab only 1 object - test purposes
+        let definition = data["hits"]["hits"][5]["_source"]["definition"];
+        let url = data["hits"]["hits"][5]["_source"]["id"];
+
+        store.commit('updateTitle', title)
+        store.commit('updateDefinition', definition)
+        store.commit('updateUrl', url)
+
+        console.log(store.state.definition);
+        console.log(store.state.title);
+        console.log(store.state.url);
+
+    }).catch((error) => {
+        trace("Error: " + error);
+    });
+}
+//Function to retrieve the data from an url
 async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         const request = new XMLHttpRequest();
@@ -29,21 +70,5 @@ async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
 
         request.open(verb, url, true /* async */);
         request.send();
-    });
-}
-function getdata(){
-    // The first cache is a simple list of Oslo result items
-    // Load the data from the web server. We're assuming a simple GET without authentication.
-    httpRequest("GET", AppConfig.dataFileUrl).then((json: string) => {
-        if (!json) {
-            error('Oslo data empty');
-        }
-
-        const data = JSON.parse(json);
-        let results = data["hits"]["hits"];
-        console.log(results);
-
-    }).catch((error) => {
-        trace("Error: " + error);
     });
 }
