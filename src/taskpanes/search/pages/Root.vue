@@ -27,6 +27,7 @@
       </vl-grid>
     </vl-layout>
     <content-footer v-if="result.length > 0" />
+    {{test}}
   </div>
 </template>
 
@@ -37,6 +38,7 @@ import { search } from "../search";
 import searchResultCard from "../../../general-components/search-result-card/search-result-card.vue";
 import contentFooter from "../components/content-footer-search-pane.vue";
 import { IOsloItem } from "src/oslo/IOsloItem";
+import {store} from "../../../store/OsloStore";
 
 export default Vue.extend({
   components: { searchResultCard, contentFooter },
@@ -45,7 +47,8 @@ export default Vue.extend({
     return {
       input: "",
       result: [] as IOsloItem[],
-      show: false
+      show: false,
+      test: store.state.test
     };
   },
   methods: {
