@@ -2,7 +2,8 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import {error, trace} from "../utils/Utils";
 import {AppConfig} from "../utils/AppConfig";
-import {IOsloStoreItem} from "./IOsloStoreItem";
+import {IOsloItem} from "../oslo/IOsloItem";
+import icons = Excel.icons;
 
 Vue.use(Vuex);
 getData();
@@ -20,7 +21,7 @@ export const store = new Vuex.Store({
 });
 
 //fetches all the data from the Oslo database
-function getData(){
+export function getData(){
     httpRequest("GET", AppConfig.dataFileUrl).then((json: string) => {
         if (!json) {
             error('Oslo data empty');
@@ -30,14 +31,17 @@ function getData(){
 
         // saves all items as OsloStore objects in Vuex store
         for (let i = 0; i < data["hits"]["hits"].length; i++) {
-            let title = data["hits"]["hits"][i]["_source"]["prefLabel"];
-            let definition = data["hits"]["hits"][i]["_source"]["definition"];
-            let url = data["hits"]["hits"][i]["_source"]["id"];
 
-            let osloEntry: IOsloStoreItem = {
-                title: title,
-                definition: definition,
-                url: url
+            let label = data["hits"]["hits"][i]["_source"]["prefLabel"];
+            let id = data["hits"]["hits"][i]["_source"]["id"];
+            let definition = data["hits"]["hits"][i]["_source"]["definition"];
+            let context = data["hits"]["hits"][i]["_source"]["context"];
+
+            let osloEntry: IOsloItem = {
+                label: label,
+                keyphrase: id,
+                description: definition,
+                reference: context
             };
             store.commit('addItem', osloEntry);
         }
