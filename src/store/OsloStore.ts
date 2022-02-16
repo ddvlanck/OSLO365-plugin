@@ -3,10 +3,8 @@ import Vue from 'vue';
 import {error, trace} from "../utils/Utils";
 import {AppConfig} from "../utils/AppConfig";
 import {IOsloItem} from "../oslo/IOsloItem";
-import icons = Excel.icons;
 
 Vue.use(Vuex);
-getData();
 
 //Vuex store
 export const store = new Vuex.Store({

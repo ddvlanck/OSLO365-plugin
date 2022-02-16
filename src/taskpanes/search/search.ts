@@ -5,7 +5,7 @@ const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { trace } from "../../utils/Utils";
 import { OsloCache } from "../../oslo/OsloCache";
 import EventBus from "../../utils/EventBus";
-import {store} from "../../store/OsloStore";
+import {getData} from "../../store/OsloStore";
 
 let searching = false;
 
@@ -29,6 +29,7 @@ Office.onReady((info) => {
   }
 
   Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, onWordSelectionChanged);
+  getData();
   OsloCache.init();
 });
 
