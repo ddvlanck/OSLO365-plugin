@@ -42,8 +42,7 @@ function getData(){
             store.commit('addItem', osloEntry);
         }
         console.log(store.state.items);
-        trace("information stored in Vuex store")
-        search("weg");
+        trace("information stored in Vuex store");
 
     }).catch((error) => {
         trace("Error: " + error);
@@ -69,16 +68,4 @@ async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
         request.open(verb, url, true /* async */);
         request.send();
     });
-}
-function search(query: string){
-    let results = [];
-    let data = store.state.items;
-
-    for (let i = 0; i < data.length; i++) {
-        if (query === data[i]["title"]){
-            results.push(data[i]);
-        }
-    }
-    console.log(results);
-    return results;
 }
