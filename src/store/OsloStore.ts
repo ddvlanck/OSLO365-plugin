@@ -2,7 +2,6 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import {error, trace} from "../utils/Utils";
 import {AppConfig} from "../utils/AppConfig";
-import {IOsloItem} from "../oslo/IOsloItem";
 import {IOsloStoreItem} from "./IOsloStoreItem";
 
 Vue.use(Vuex);
@@ -44,6 +43,7 @@ function getData(){
         }
         console.log(store.state.items);
         trace("information stored in Vuex store")
+        search("weg");
 
     }).catch((error) => {
         trace("Error: " + error);
@@ -71,5 +71,14 @@ async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
     });
 }
 function search(query: string){
+    let results = [];
+    let data = store.state.items;
 
+    for (let i = 0; i < data.length; i++) {
+        if (query === data[i]["title"]){
+            results.push(data[i]);
+        }
+    }
+    console.log(results);
+    return results;
 }
