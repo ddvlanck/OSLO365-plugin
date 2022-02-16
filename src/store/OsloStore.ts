@@ -10,19 +10,19 @@ getData();
 //Vuex store
 export const store = new Vuex.Store({
     state: {
-        title: "bliepblop",
-        definition: "blopblop",
-        url: "www.blopblop.com"
+        title: [],
+        definition: [],
+        url: []
     },
     mutations: {
-        updateTitle (state, title) {
-            state.title = title
+        addTitle (state, title) {
+            state.title.push(title);
         },
-        updateDefinition (state, definition) {
-            state.definition = definition
+        addDefinition (state, definition) {
+            state.definition.push(definition);
         },
-        updateUrl (state, url) {
-            state.url = url
+        addUrl (state, url) {
+            state.url.push(url);
         }
     }
 });
@@ -35,16 +35,25 @@ function getData(){
         }
         //clean on the objects we need
         const data = JSON.parse(json);
-        let title = data["hits"]["hits"][5]["_source"]["prefLabel"];  //5 to grab only 1 object - test purposes
-        let definition = data["hits"]["hits"][5]["_source"]["definition"];
-        let url = data["hits"]["hits"][5]["_source"]["id"];
 
-        store.commit('updateTitle', title)
-        store.commit('updateDefinition', definition)
-        store.commit('updateUrl', url)
+        //add all titles
+        for (let i = 0; i < data["hits"]["hits"].length; i++) {
+            let title = data["hits"]["hits"][i]["_source"]["prefLabel"];
+            store.commit('addTitle', title);
+        }
+        // add all definitions
+        for (let i = 0; i < data["hits"]["hits"].length; i++) {
+            let definition = data["hits"]["hits"][i]["_source"]["definition"];
+            store.commit('addDefinition', definition);
+        }
+        // add all url's
+        for (let i = 0; i < data["hits"]["hits"].length; i++) {
+            let url = data["hits"]["hits"][5]["_source"]["id"];
+            store.commit('addUrl', url);
+        }
 
-        console.log(store.state.definition);
         console.log(store.state.title);
+        console.log(store.state.definition);
         console.log(store.state.url);
 
     }).catch((error) => {
