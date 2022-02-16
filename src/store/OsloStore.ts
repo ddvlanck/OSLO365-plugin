@@ -2,7 +2,8 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import {error, trace} from "../utils/Utils";
 import {AppConfig} from "../utils/AppConfig";
-
+import {IOsloItem} from "../oslo/IOsloItem";
+import {IOsloStoreItem} from "./IOsloStoreItem";
 
 Vue.use(Vuex);
 getData();
@@ -10,19 +11,11 @@ getData();
 //Vuex store
 export const store = new Vuex.Store({
     state: {
-        title: [],
-        definition: [],
-        url: []
+        items: []
     },
     mutations: {
-        addTitle (state, title) {
-            state.title.push(title);
-        },
-        addDefinition (state, definition) {
-            state.definition.push(definition);
-        },
-        addUrl (state, url) {
-            state.url.push(url);
+        addItem (state, item) {
+            state.items.push(item)
         }
     }
 });
@@ -33,28 +26,24 @@ function getData(){
         if (!json) {
             error('Oslo data empty');
         }
-        //clean on the objects we need
+        //convert to usable JSON
         const data = JSON.parse(json);
 
-        //add all titles
+        // saves all items as OsloStore objects in Vuex store
         for (let i = 0; i < data["hits"]["hits"].length; i++) {
             let title = data["hits"]["hits"][i]["_source"]["prefLabel"];
-            store.commit('addTitle', title);
-        }
-        // add all definitions
-        for (let i = 0; i < data["hits"]["hits"].length; i++) {
             let definition = data["hits"]["hits"][i]["_source"]["definition"];
-            store.commit('addDefinition', definition);
-        }
-        // add all url's
-        for (let i = 0; i < data["hits"]["hits"].length; i++) {
-            let url = data["hits"]["hits"][5]["_source"]["id"];
-            store.commit('addUrl', url);
-        }
+            let url = data["hits"]["hits"][i]["_source"]["id"];
 
-        console.log(store.state.title);
-        console.log(store.state.definition);
-        console.log(store.state.url);
+            let osloEntry: IOsloStoreItem = {
+                title: title,
+                definition: definition,
+                url: url
+            };
+            store.commit('addItem', osloEntry);
+        }
+        console.log(store.state.items);
+        trace("information stored in Vuex store")
 
     }).catch((error) => {
         trace("Error: " + error);
@@ -80,4 +69,7 @@ async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
         request.open(verb, url, true /* async */);
         request.send();
     });
+}
+function search(query: string){
+
 }
