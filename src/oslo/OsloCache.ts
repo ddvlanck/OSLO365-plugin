@@ -129,6 +129,7 @@ export class OsloCache {
   }
 
   /** Looks up the given phrase in the OSLO database and returns the results via the given callback */
+
   public osloLookup(phrase: string, useExactMatching: boolean): IOsloItem[] {
     if (!phrase) {
       return null;

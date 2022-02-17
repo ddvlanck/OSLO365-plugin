@@ -23,13 +23,13 @@ export function initStore(){
     // only need to init once
     if (store.state.items.length < 1){
         trace("initializing store");
+
         httpRequest("GET", AppConfig.dataFileUrl).then((json: string) => {
             if (!json) {
                 error('Oslo data empty');
             }
             //convert to usable JSON
             const data = JSON.parse(json);
-
 
             // saves all items as OsloStore objects in Vuex store
             for (let i = 0; i < data["hits"]["hits"].length; i++) {
@@ -77,4 +77,29 @@ async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
         request.open(verb, url, true /* async */);
         request.send();
     });
+}
+export function osloLookup2(phrase: string, useExactMatching: boolean): IOsloItem[] {
+    if (!phrase) {
+        return null;
+    }
+
+    phrase = phrase.toLowerCase().trim();
+
+    const matches: IOsloItem[] = [];
+
+    let items = store.state.items;
+
+    for (const item of items){
+        if (typeof item.label === 'string'){
+            let possible = item.label.toLowerCase();
+            let result = possible.search(phrase);
+            if (result >= 0){
+                matches.push(item);
+            }
+        }
+    }
+    matches.sort();
+    console.log(matches);
+    return matches
+
 }

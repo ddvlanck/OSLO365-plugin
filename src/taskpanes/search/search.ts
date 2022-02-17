@@ -5,7 +5,7 @@ const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { trace } from "../../utils/Utils";
 import { OsloCache } from "../../oslo/OsloCache";
 import EventBus from "../../utils/EventBus";
-import {initStore} from "../../store/OsloStore";
+import {initStore, osloLookup2} from "../../store/OsloStore";
 
 let searching = false;
 
@@ -87,7 +87,7 @@ export function search(searchPhrase: string) {
   const osloCache = OsloCache.getInstance();
 
   // Search the phrase in the OSLO database
-  const osloResult = osloCache.osloLookup(searchPhrase, exactMatch);
+  const osloResult = osloLookup2(searchPhrase, exactMatch);
 
   EventBus.$emit("onSearchResult", osloResult);
 }

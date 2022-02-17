@@ -27,7 +27,6 @@
       </vl-grid>
     </vl-layout>
     <content-footer v-if="result.length > 0" />
-    {{items}}
   </div>
 </template>
 
@@ -47,7 +46,7 @@ export default Vue.extend({
     return {
       input: "",
       show: false,
-      result: store.state.items
+      result: [] as IOsloItem[]
     };
   },
   methods: {
