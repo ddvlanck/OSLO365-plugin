@@ -31,7 +31,7 @@ export function initStore(){
             //convert to usable JSON
             const data = JSON.parse(json);
 
-            // saves all items as OsloStore objects in Vuex store
+            // saves all items as OsloItems (interface) in Vuex store
             for (let i = 0; i < data["hits"]["hits"].length; i++) {
 
                 let label = data["hits"]["hits"][i]["_source"]["prefLabel"];
@@ -78,28 +78,28 @@ async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
         request.send();
     });
 }
+//function to search the keyword in the Vuex store
 export function osloStoreLookup(phrase: string, useExactMatching: boolean): IOsloItem[] {
     if (!phrase) {
         return null;
     }
-
+    //clean
     phrase = phrase.toLowerCase().trim();
-
+    // new list
     const matches: IOsloItem[] = [];
 
     let items = store.state.items;
-
+    // loop for possible matches
     for (const item of items){
         if (typeof item.label === 'string'){
             let possible = item.label.toLowerCase();
-            let result = possible.search(phrase);
-            if (result >= 0){
+            let result = possible.search(phrase); // returns position of word in the label
+            if (result >= 0){  // -1 is no match, so everything on position 0 to infinity is a match
                 matches.push(item);
             }
         }
     }
     matches.sort();
-    console.log(matches);
     return matches
 
 }
