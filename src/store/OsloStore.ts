@@ -19,36 +19,43 @@ export const store = new Vuex.Store({
 });
 
 //fetches all the data from the Oslo database
-export function getData(){
-    httpRequest("GET", AppConfig.dataFileUrl).then((json: string) => {
-        if (!json) {
-            error('Oslo data empty');
-        }
-        //convert to usable JSON
-        const data = JSON.parse(json);
+export function initStore(){
+    // only need to init once
+    if (store.state.items.length < 1){
+        trace("initializing store");
+        httpRequest("GET", AppConfig.dataFileUrl).then((json: string) => {
+            if (!json) {
+                error('Oslo data empty');
+            }
+            //convert to usable JSON
+            const data = JSON.parse(json);
 
-        // saves all items as OsloStore objects in Vuex store
-        for (let i = 0; i < data["hits"]["hits"].length; i++) {
 
-            let label = data["hits"]["hits"][i]["_source"]["prefLabel"];
-            let id = data["hits"]["hits"][i]["_source"]["id"];
-            let definition = data["hits"]["hits"][i]["_source"]["definition"];
-            let context = data["hits"]["hits"][i]["_source"]["context"];
+            // saves all items as OsloStore objects in Vuex store
+            for (let i = 0; i < data["hits"]["hits"].length; i++) {
 
-            let osloEntry: IOsloItem = {
-                label: label,
-                keyphrase: id,
-                description: definition,
-                reference: context
-            };
-            store.commit('addItem', osloEntry);
-        }
-        console.log(store.state.items);
-        trace("information stored in Vuex store");
+                let label = data["hits"]["hits"][i]["_source"]["prefLabel"];
+                let id = data["hits"]["hits"][i]["_source"]["id"];
+                let definition = data["hits"]["hits"][i]["_source"]["definition"];
+                let context = data["hits"]["hits"][i]["_source"]["context"];
 
-    }).catch((error) => {
-        trace("Error: " + error);
-    });
+                let osloEntry: IOsloItem = {
+                    label: label,
+                    keyphrase: id,
+                    description: definition,
+                    reference: context
+                };
+                store.commit('addItem', osloEntry);
+            }
+            trace("information stored in Vuex store");
+
+        }).catch((error) => {
+            trace("Error: " + error);
+        });
+    }
+    else {
+        trace("store already initialized");
+    }
 }
 //Function to retrieve the data from an url
 async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {

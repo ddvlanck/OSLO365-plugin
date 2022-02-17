@@ -6,7 +6,7 @@ const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { wordDelimiters } from "../../utils/WordDelimiters";
 import { ignoredWords } from "../../utils/IgnoredWords";
 import { IOsloItem } from "../../oslo/IOsloItem";
-import {getData} from "../../store/OsloStore";
+import {initStore} from "../../store/OsloStore";
 
 // configuration of the built-in validator
 const validatorConfig = {
@@ -27,6 +27,7 @@ Office.onReady((info) => {
   }
 
   // TODO: Use VUEX Store, so that not every pane has to initialize it
+  initStore();
   OsloCache.init();
 });
 
