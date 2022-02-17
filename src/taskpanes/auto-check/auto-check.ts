@@ -6,7 +6,7 @@ const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { wordDelimiters } from "../../utils/WordDelimiters";
 import { ignoredWords } from "../../utils/IgnoredWords";
 import { IOsloItem } from "../../oslo/IOsloItem";
-import {initStore} from "../../store/OsloStore";
+import {initStore, osloStoreLookup} from "../../store/OsloStore";
 
 // configuration of the built-in validator
 const validatorConfig = {
@@ -73,7 +73,7 @@ export async function searchDocument() {
       }
 
       for (let word of wordList) {
-        if (osloInstance.osloLookup(word.text, false).length > 0) {
+        if (osloStoreLookup(word.text, false).length > 0) {
           wordsWithMatches.push(word);
         }
       }
@@ -89,7 +89,7 @@ export async function searchDocument() {
 }
 
 export function getDefinitions(word: Word.Range): IOsloItem[] {
-  return OsloCache.getInstance().osloLookup(word.text, false);
+  return osloStoreLookup(word.text, false);
 }
 
 // This function expected the cursor to be at the beginning of the document

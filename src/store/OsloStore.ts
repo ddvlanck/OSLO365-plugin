@@ -78,7 +78,7 @@ async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
         request.send();
     });
 }
-export function osloLookup2(phrase: string, useExactMatching: boolean): IOsloItem[] {
+export function osloStoreLookup(phrase: string, useExactMatching: boolean): IOsloItem[] {
     if (!phrase) {
         return null;
     }
