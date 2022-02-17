@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 import Vue from "vue";
-import { OsloCache } from "../../oslo/OsloCache";
 import root from "./pages/Root.vue";
 const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { wordDelimiters } from "../../utils/WordDelimiters";
@@ -25,10 +24,7 @@ Office.onReady((info) => {
       render: (h) => h(root),
     });
   }
-
-  // TODO: Use VUEX Store, so that not every pane has to initialize it
   initStore();
-  OsloCache.init();
 });
 
 export async function searchDocument() {
@@ -38,8 +34,6 @@ export async function searchDocument() {
     const range = context.document.body.getRange();
     range.load();
     await context.sync();
-
-    const osloInstance = OsloCache.getInstance();
 
     let paragraph = range.paragraphs.getFirstOrNullObject();
     paragraph.load();

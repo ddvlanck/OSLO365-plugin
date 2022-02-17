@@ -3,7 +3,6 @@ import Vuex from "vuex";
 import root from "./pages/Root.vue";
 const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { trace } from "../../utils/Utils";
-import { OsloCache } from "../../oslo/OsloCache";
 import EventBus from "../../utils/EventBus";
 import {initStore, osloStoreLookup} from "../../store/OsloStore";
 
@@ -29,7 +28,6 @@ Office.onReady((info) => {
   }
   initStore();
   Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, onWordSelectionChanged);
-  OsloCache.init();
 });
 
 /** Called when the user selects something in the Word document */
@@ -83,8 +81,6 @@ export function search(searchPhrase: string) {
     // Remove the equals char from the search phrase
     searchPhrase = searchPhrase.slice(1);
   }
-
-  const osloCache = OsloCache.getInstance();
 
   // Search the phrase in the OSLO database
   const osloResult = osloStoreLookup(searchPhrase, exactMatch);
