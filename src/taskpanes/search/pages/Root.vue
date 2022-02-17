@@ -46,9 +46,8 @@ export default Vue.extend({
   data: () => {
     return {
       input: "",
-      result: [] as IOsloItem[],
       show: false,
-      items: store.state.items
+      result: store.state.items
     };
   },
   methods: {
