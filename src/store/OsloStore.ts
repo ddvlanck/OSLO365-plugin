@@ -90,7 +90,7 @@ export class OsloStore {
         let items = store.state.items;
         // loop for possible matches
         for (const item of items) {
-            if (typeof item.label === 'string') {
+            if (typeof item.label === 'string') { //FIXME 4 objects are incomplete so we filter them out
                 let possible = item.label.toLowerCase();
                 let result = possible.search(phrase); // returns position of word in the label
                 if (result >= 0) {  // -1 is no match, so everything on position 0 to infinity is a match
@@ -100,7 +100,6 @@ export class OsloStore {
         }
         return matches.sort();
     }
-
     private static storeItem(item) {
         let osloEntry: IOsloItem = { // new oslo object
             label: item["_source"]["prefLabel"],
