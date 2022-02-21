@@ -4,7 +4,7 @@ import root from "./pages/Root.vue";
 const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { trace } from "../../utils/Utils";
 import EventBus from "../../utils/EventBus";
-import {OsloStore} from "../../store/OsloStore";
+import { OsloStore } from "../../store/OsloStore";
 
 let searching = false;
 

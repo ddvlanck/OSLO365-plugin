@@ -5,7 +5,7 @@ const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { wordDelimiters } from "../../utils/WordDelimiters";
 import { ignoredWords } from "../../utils/IgnoredWords";
 import { IOsloItem } from "../../oslo/IOsloItem";
-import {OsloStore} from "../../store/OsloStore";
+import { OsloStore } from "../../store/OsloStore";
 
 // configuration of the built-in validator
 const validatorConfig = {
