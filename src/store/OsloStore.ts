@@ -17,82 +17,97 @@ export const store = new Vuex.Store({
         }
     }
 });
-//fetches all the data from the Oslo database
-export function initStore(){
-    // only need to init once
-    if (store.state.items.length < 1){
-        trace("initializing store");
+export class OsloStore {
 
-        httpRequest("GET", AppConfig.dataFileUrl).then((json: string) => {
-            if (!json) {
-                error('Oslo data empty');
+    private static instance: OsloStore;
+
+    private constructor() {
+        this.initStore();
+    }
+
+    public static getInstance(): OsloStore {
+        if (!OsloStore.instance) {
+            OsloStore.instance = new OsloStore();
+        }
+
+        return OsloStore.instance;
+    }
+    //fetches all the data from the Oslo database
+    public initStore() {
+        // only need to init once
+        if (store.state.items.length < 1) {
+            trace("initializing store");
+
+            this.httpRequest("GET", AppConfig.dataFileUrl).then((json: string) => {
+                if (!json) {
+                    error('Oslo data empty');
+                }
+                const data = JSON.parse(json); //convert to usable JSON
+                const cleandata = data["hits"]["hits"]; //filter out stuff we don't really need
+
+                cleandata.map(item => OsloStore.storeItem(item));
+
+                trace("information stored in Vuex store");
+
+            }).catch((error) => {
+                trace("Error: " + error);
+            });
+        } else {
+            trace("store already initialized");
+        }
+    }
+    //Function to retrieve the data from an url
+    async httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
+        return new Promise<string>((resolve, reject) => {
+            const request = new XMLHttpRequest();
+
+            // Callback after request.send()
+            request.onload = function (event) {
+                if (request.status === 200) {
+                    // HTTP request successful, resolve the promise with the response body
+                    resolve(request.response);
+                } else {
+                    // HTTP request failed
+                    error(`Error after ${verb} from ${url} : ${request.status} ${request.statusText}`);
+                    resolve(null);
+                }
             }
-            const data = JSON.parse(json); //convert to usable JSON
-            const cleandata = data["hits"]["hits"]; //filter out stuff we don't really need
 
-            cleandata.map(item => storeItem(item));
-
-            trace("information stored in Vuex store");
-
-        }).catch((error) => {
-            trace("Error: " + error);
+            request.open(verb, url, true /* async */);
+            request.send();
         });
     }
-    else {
-        trace("store already initialized");
-    }
-}
-//Function to retrieve the data from an url
-async function httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-        const request = new XMLHttpRequest();
+    //function to search the keyword in the Vuex store
+    public osloStoreLookup(phrase: string, useExactMatching: boolean): IOsloItem[] {
+        if (!phrase) {
+            return null;
+        }
+        //clean
+        phrase = phrase.toLowerCase().trim();
+        // new list
+        const matches: IOsloItem[] = [];
 
-        // Callback after request.send()
-        request.onload = function (event) {
-            if (request.status === 200) {
-                // HTTP request successful, resolve the promise with the response body
-                resolve(request.response);
-            } else {
-                // HTTP request failed
-                error(`Error after ${verb} from ${url} : ${request.status} ${request.statusText}`);
-                resolve(null);
+        let items = store.state.items;
+        // loop for possible matches
+        for (const item of items) {
+            if (typeof item.label === 'string') {
+                let possible = item.label.toLowerCase();
+                let result = possible.search(phrase); // returns position of word in the label
+                if (result >= 0) {  // -1 is no match, so everything on position 0 to infinity is a match
+                    matches.push(item);
+                }
             }
         }
-
-        request.open(verb, url, true /* async */);
-        request.send();
-    });
-}
-//function to search the keyword in the Vuex store
-export function osloStoreLookup(phrase: string, useExactMatching: boolean): IOsloItem[] {
-    if (!phrase) {
-        return null;
+        return matches.sort();
     }
-    //clean
-    phrase = phrase.toLowerCase().trim();
-    // new list
-    const matches: IOsloItem[] = [];
 
-    let items = store.state.items;
-    // loop for possible matches
-    for (const item of items){
-        if (typeof item.label === 'string'){
-            let possible = item.label.toLowerCase();
-            let result = possible.search(phrase); // returns position of word in the label
-            if (result >= 0){  // -1 is no match, so everything on position 0 to infinity is a match
-                matches.push(item);
-            }
-        }
+    private static storeItem(item) {
+        let osloEntry: IOsloItem = { // new oslo object
+            label: item["_source"]["prefLabel"],
+            keyphrase: item["_source"]["id"],
+            description: item["_source"]["definition"],
+            reference: item["_source"]["context"]
+        };
+        store.commit('addItem', osloEntry);
     }
-    return matches.sort();
-}
-function storeItem(item){
-
-    let osloEntry: IOsloItem = { // new oslo object
-        label: item["_source"]["prefLabel"],
-        keyphrase: item["_source"]["id"],
-        description: item["_source"]["definition"],
-        reference: item["_source"]["context"]
-    };
-    store.commit('addItem', osloEntry);
 }

@@ -4,7 +4,7 @@ import root from "./pages/Root.vue";
 const VlUiVueComponents = require("@govflanders/vl-ui-vue-components");
 import { trace } from "../../utils/Utils";
 import EventBus from "../../utils/EventBus";
-import {initStore, osloStoreLookup} from "../../store/OsloStore";
+import {OsloStore} from "../../store/OsloStore";
 
 let searching = false;
 
@@ -18,6 +18,7 @@ Vue.use(VlUiVueComponents, {
   validation: validatorConfig,
 });
 Vue.use(Vuex);
+const store = OsloStore.getInstance();
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Word) {
@@ -26,7 +27,7 @@ Office.onReady((info) => {
       render: (h) => h(root),
     });
   }
-  initStore();
+  store.initStore();
   Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, onWordSelectionChanged);
 });
 
@@ -83,7 +84,7 @@ export function search(searchPhrase: string) {
   }
 
   // Search the phrase in the OSLO database
-  const osloResult = osloStoreLookup(searchPhrase, exactMatch);
+  const osloResult = store.osloStoreLookup(searchPhrase, exactMatch);
 
   EventBus.$emit("onSearchResult", osloResult);
 }
