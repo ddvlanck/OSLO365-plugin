@@ -17,7 +17,6 @@ export const store = new Vuex.Store({
         }
     }
 });
-
 //fetches all the data from the Oslo database
 export function initStore(){
     // only need to init once
@@ -28,25 +27,11 @@ export function initStore(){
             if (!json) {
                 error('Oslo data empty');
             }
-            //convert to usable JSON
-            const data = JSON.parse(json);
+            const data = JSON.parse(json); //convert to usable JSON
+            const cleandata = data["hits"]["hits"]; //filter out stuff we don't really need
 
-            // saves all items as OsloItems (interface) in Vuex store
-            for (let i = 0; i < data["hits"]["hits"].length; i++) {
+            cleandata.map(item => storeItem(item));
 
-                let label = data["hits"]["hits"][i]["_source"]["prefLabel"];
-                let id = data["hits"]["hits"][i]["_source"]["id"];
-                let definition = data["hits"]["hits"][i]["_source"]["definition"];
-                let context = data["hits"]["hits"][i]["_source"]["context"];
-
-                let osloEntry: IOsloItem = {
-                    label: label,
-                    keyphrase: id,
-                    description: definition,
-                    reference: context
-                };
-                store.commit('addItem', osloEntry);
-            }
             trace("information stored in Vuex store");
 
         }).catch((error) => {
@@ -99,7 +84,15 @@ export function osloStoreLookup(phrase: string, useExactMatching: boolean): IOsl
             }
         }
     }
-    matches.sort();
-    return matches
+    return matches.sort();
+}
+function storeItem(item){
 
+    let osloEntry: IOsloItem = { // new oslo object
+        label: item["_source"]["prefLabel"],
+        keyphrase: item["_source"]["id"],
+        description: item["_source"]["definition"],
+        reference: item["_source"]["context"]
+    };
+    store.commit('addItem', osloEntry);
 }
