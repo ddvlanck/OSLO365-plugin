@@ -3,25 +3,16 @@ import Vue from "vue";
 import { error, trace } from "../utils/Utils";
 import { AppConfig } from "../utils/AppConfig";
 import { IOsloItem } from "../oslo/IOsloItem";
+import { Store } from "vuex";
 
 Vue.use(Vuex);
 
-//Vuex store
-export const store = new Vuex.Store({
-  state: {
-    items: [],
-  },
-  mutations: {
-    addItem(state, item) {
-      state.items.push(item);
-    },
-  },
-});
 export class OsloStore {
   private static instance: OsloStore;
+  private store: any;
 
   private constructor() {
-    this.initStore();
+    this.init();
   }
 
   public static getInstance(): OsloStore {
@@ -31,10 +22,13 @@ export class OsloStore {
 
     return OsloStore.instance;
   }
-  //fetches all the data from the Oslo database
-  public initStore() {
+
+  // Fetches all the data from the Oslo database
+  public init() {
+    this.initializeStore();
+
     // only need to init once
-    if (store.state.items.length < 1) {
+    if (this.store.state.items.length < 1) {
       trace("initializing store");
 
       this.httpRequest("GET", AppConfig.dataFileUrl)
@@ -45,7 +39,7 @@ export class OsloStore {
           const data = JSON.parse(json); //convert to usable JSON
           const cleandata = data["hits"]["hits"]; //filter out stuff we don't really need
 
-          cleandata.map((item) => OsloStore.storeItem(item));
+          cleandata.map((item) => this.storeItem(item));
 
           trace("information stored in Vuex store");
         })
@@ -56,8 +50,9 @@ export class OsloStore {
       trace("store already initialized");
     }
   }
+
   //Function to retrieve the data from an url
-  async httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
+  private async httpRequest(verb: "GET" | "PUT", url: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       const request = new XMLHttpRequest();
 
@@ -77,7 +72,8 @@ export class OsloStore {
       request.send();
     });
   }
-  //function to search the keyword in the Vuex store
+
+  // Function to search the keyword in the Vuex store
   public osloStoreLookup(phrase: string, useExactMatching: boolean): IOsloItem[] {
     if (!phrase) {
       return null;
@@ -87,7 +83,7 @@ export class OsloStore {
     // new list
     const matches: IOsloItem[] = [];
 
-    let items = store.state.items;
+    let items = this.store.state.items;
     // loop for possible matches
     for (const item of items) {
       if (typeof item.label === "string") {
@@ -102,7 +98,8 @@ export class OsloStore {
     }
     return matches.sort();
   }
-  private static storeItem(item) {
+
+  private storeItem(item) {
     let osloEntry: IOsloItem = {
       // new oslo object
       label: item["_source"]["prefLabel"],
@@ -110,6 +107,23 @@ export class OsloStore {
       description: item["_source"]["definition"],
       reference: item["_source"]["context"],
     };
-    store.commit("addItem", osloEntry);
+    this.store.commit("addItem", osloEntry);
+  }
+
+  private initializeStore() {
+    this.store = new Store({
+      state: {
+        items: [] as IOsloItem[],
+      },
+      mutations: {
+        addItem(state, item) {
+          state.items.push(item);
+        },
+      },
+    });
+  }
+
+  public getStore() {
+    return this.store;
   }
 }

@@ -18,16 +18,18 @@ Vue.use(VlUiVueComponents, {
   validation: validatorConfig,
 });
 Vue.use(Vuex);
-const store = OsloStore.getInstance();
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Word) {
+    const osloStore = OsloStore.getInstance();
+    const store = osloStore.getStore();
+
     var app = new Vue({
+      store: store,
       el: "#app",
       render: (h) => h(root),
     });
   }
-  store.initStore();
   Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, onWordSelectionChanged);
 });
 
